@@ -1119,7 +1119,7 @@ MonoBehaviour:
   moveSpeed: 3
   playerCollider: {fileID: 1254344090}
   jumpSpeed: 7
-  maxJump: 2
+  maxJump: 1
   groundCheck: {fileID: 939758440}
   groundCheckRadius: 0.2
   baseGravity: 2
