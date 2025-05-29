@@ -3,18 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Platform
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Background
   - Water
   - UI
+  - Platforms
+  - Ground
   - 
-  - 
-  - 
-  - 
+  - Player
   - 
   - 
   - 
@@ -40,4 +41,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1698697041
+    locked: 0
+  - name: Ground
+    uniqueID: 754402127
+    locked: 0
+  - name: Items
+    uniqueID: 2901715537
+    locked: 0
+  - name: Platforms
+    uniqueID: 1631709889
+    locked: 0
+  - name: Items
+    uniqueID: 4094503893
+    locked: 0
+  - name: Player
+    uniqueID: 3747884531
     locked: 0
