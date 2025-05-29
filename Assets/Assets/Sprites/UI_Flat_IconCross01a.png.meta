@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9476cc4ebfb816140b936aa1317c7c8f
+guid: 30504feb377c15e43a5478a5d0249934
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3234329810992173913
-    second: star_08_0
+      213: -8078137394617387119
+    second: UI_Flat_IconCross01a_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: star_08_0
+      name: UI_Flat_IconCross01a_0
       rect:
         serializedVersion: 2
-        x: 74
-        y: 74
-        width: 364
-        height: 438
+        x: 0
+        y: 0
+        width: 15
+        height: 15
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -114,8 +114,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7acea515c2a5d13d0800000000000000
-      internalID: -3234329810992173913
+      spriteID: 197f703e6d0b4ef80800000000000000
+      internalID: -8078137394617387119
       vertices: []
       indices: 
       edges: []
@@ -130,8 +130,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      star_08_0: -3234329810992173913
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

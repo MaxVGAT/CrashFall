@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9476cc4ebfb816140b936aa1317c7c8f
+guid: 42492c289d2e6fc49aab01d1cf17e2d9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3234329810992173913
-    second: star_08_0
+      213: -98070244222629441
+    second: Foreground_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: star_08_0
+      name: Foreground_0
       rect:
         serializedVersion: 2
-        x: 74
-        y: 74
-        width: 364
-        height: 438
+        x: 0
+        y: 0
+        width: 147
+        height: 41
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -114,8 +114,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7acea515c2a5d13d0800000000000000
-      internalID: -3234329810992173913
+      spriteID: fb9031ae1a593aef0800000000000000
+      internalID: -98070244222629441
       vertices: []
       indices: 
       edges: []
@@ -131,7 +131,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      star_08_0: -3234329810992173913
+      Foreground_0: -98070244222629441
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

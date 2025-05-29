@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c51a46e28dda2c8468021b3dba62b773
+guid: c414af108cabf8c43b8c468d4df8e5c2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7806759438263799239
-    second: tile_0086_0
+      213: 2408666096652550136
+    second: Background Bar_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -57,7 +57,7 @@ TextureImporter:
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 7
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: tile_0086_0
+      name: Background Bar_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 16
+        width: 121
+        height: 37
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -114,8 +114,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 932bb5327a1d8a390800000000000000
-      internalID: -7806759438263799239
+      spriteID: 8ff7081ad0d4d6120800000000000000
+      internalID: 2408666096652550136
       vertices: []
       indices: 
       edges: []
@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Background Bar_0: 2408666096652550136
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
