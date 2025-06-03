@@ -1,0 +1,341 @@
+fileFormatVersion: 2
+guid: 738ad7242b41daa43892c06c92241e09
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6768570261983512148
+    second: Eletric Aura_0
+  - first:
+      213: 2074332768552048465
+    second: Eletric Aura_1
+  - first:
+      213: -423708213360539407
+    second: Eletric Aura_2
+  - first:
+      213: 8041873697802322043
+    second: Eletric Aura_3
+  - first:
+      213: -7134212155038361855
+    second: Eletric Aura_4
+  - first:
+      213: -8436201167183659505
+    second: Eletric Aura_5
+  - first:
+      213: 2874901198729772557
+    second: Eletric Aura_6
+  - first:
+      213: -6435895713076114230
+    second: Eletric Aura_7
+  - first:
+      213: 2251347923470148839
+    second: Eletric Aura_8
+  - first:
+      213: 576072534672821345
+    second: Eletric Aura_9
+  - first:
+      213: 3425349138747977056
+    second: Eletric Aura_10
+  - first:
+      213: -5007610153709095786
+    second: Eletric Aura_11
+  - first:
+      213: 7803194001829356604
+    second: Eletric Aura_12
+  - first:
+      213: -4776275506876517966
+    second: Eletric Aura_13
+  - first:
+      213: -1119882764549174893
+    second: Eletric Aura_14
+  - first:
+      213: -5893645196333798982
+    second: Eletric Aura_15
+  - first:
+      213: -3918348839531632158
+    second: Eletric Aura_16
+  - first:
+      213: 7106875060088450588
+    second: Eletric Aura_17
+  - first:
+      213: -2870312215085777119
+    second: Eletric Aura_18
+  - first:
+      213: -4500998059752982993
+    second: Eletric Aura_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Eletric Aura_0
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 108
+        width: 41
+        height: 72
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca9333945353112a0800000000000000
+      internalID: -6768570261983512148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Eletric Aura_1
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 106
+        width: 49
+        height: 76
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1575f77a9a289cc10800000000000000
+      internalID: 2074332768552048465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Eletric Aura_2
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 125
+        width: 55
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f8ca36ff9fae1af0800000000000000
+      internalID: -423708213360539407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Eletric Aura_3
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 106
+        width: 47
+        height: 76
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b70801e35897a9f60800000000000000
+      internalID: 8041873697802322043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Eletric Aura_6
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 112
+        width: 55
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0ef1aa8863b5e720800000000000000
+      internalID: 2874901198729772557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Eletric Aura_14
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 19
+        width: 47
+        height: 66
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 399c6fc1f806570f0800000000000000
+      internalID: -1119882764549174893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Eletric Aura_15
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 10
+        width: 46
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab926587be0953ea0800000000000000
+      internalID: -5893645196333798982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 490065b5da62a8241adfb46cf46c1ca9
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Eletric Aura_0: -6768570261983512148
+      Eletric Aura_1: 2074332768552048465
+      Eletric Aura_10: 3425349138747977056
+      Eletric Aura_11: -5007610153709095786
+      Eletric Aura_12: 7803194001829356604
+      Eletric Aura_13: -4776275506876517966
+      Eletric Aura_14: -1119882764549174893
+      Eletric Aura_15: -5893645196333798982
+      Eletric Aura_16: -3918348839531632158
+      Eletric Aura_17: 7106875060088450588
+      Eletric Aura_18: -2870312215085777119
+      Eletric Aura_19: -4500998059752982993
+      Eletric Aura_2: -423708213360539407
+      Eletric Aura_3: 8041873697802322043
+      Eletric Aura_4: -7134212155038361855
+      Eletric Aura_5: -8436201167183659505
+      Eletric Aura_6: 2874901198729772557
+      Eletric Aura_7: -6435895713076114230
+      Eletric Aura_8: 2251347923470148839
+      Eletric Aura_9: 576072534672821345
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class PlayerMove : MonoBehaviour
 
     [Header("GroundCheck")]
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private float groundCheckRadius = 0.2f;
+    [SerializeField] private Vector2 boxSize = new Vector2(0.8f, 0.1f);
     bool isOnPlatform;
     bool grounded;
 
@@ -100,8 +101,8 @@ public class PlayerMove : MonoBehaviour
 
     private bool GroundCheck()
     {
-        bool OnGround = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-        bool onPlatform = Physics2D.OverlapCircle(groundCheck.position, 0.2f, platformLayer);
+        bool OnGround = Physics2D.OverlapBox(groundCheck.position, boxSize, 0f, groundLayer);
+        bool onPlatform = Physics2D.OverlapBox(groundCheck.position, boxSize, 0f, platformLayer);
 
         isOnPlatform = onPlatform;
         bool grounded = OnGround || onPlatform;
@@ -145,6 +146,11 @@ public class PlayerMove : MonoBehaviour
         {
             isOnPlatform = true;
         }
+
+        if (collision.gameObject.CompareTag("Trap"))
+        {
+            SceneManager.LoadScene("SampleScene");
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -158,6 +164,6 @@ public class PlayerMove : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius); // Now shows a circle
+        Gizmos.DrawWireCube(groundCheck.position, boxSize);
     }
 }

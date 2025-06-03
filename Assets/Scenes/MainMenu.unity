@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 135609127}
   - component: {fileID: 135609129}
   - component: {fileID: 135609126}
+  - component: {fileID: 135609130}
   m_Layer: 5
   m_Name: CloseSettings
   m_TagString: Untagged
@@ -401,6 +402,35 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 135609130}
+        m_TargetAssemblyTypeName: ButtonHoverEffect, Assembly-CSharp
+        m_MethodName: CloseSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &135609130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135609124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c87bbbf1b5e66c488bc76a7afc485e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverEffect: {fileID: 0}
+  audioSource: {fileID: 733144572}
+  hoverSound: {fileID: 8300000, guid: 8a180e65fc9f31e4897f8ec71ab5036c, type: 3}
+  openSound: {fileID: 8300000, guid: 75afcdb530fb998448d01d527b5f1b69, type: 3}
+  closeSound: {fileID: 8300000, guid: 735f7d8151b11b640b647658b90b8f7e, type: 3}
 --- !u!1 &163937454
 GameObject:
   m_ObjectHideFlags: 0
@@ -848,6 +878,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 447784765}
+        m_TargetAssemblyTypeName: ButtonHoverEffect, Assembly-CSharp
+        m_MethodName: OpenSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &447784765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -863,6 +905,8 @@ MonoBehaviour:
   hoverEffect: {fileID: 832094313}
   audioSource: {fileID: 733144572}
   hoverSound: {fileID: 8300000, guid: 8a180e65fc9f31e4897f8ec71ab5036c, type: 3}
+  openSound: {fileID: 8300000, guid: 75afcdb530fb998448d01d527b5f1b69, type: 3}
+  closeSound: {fileID: 8300000, guid: 735f7d8151b11b640b647658b90b8f7e, type: 3}
 --- !u!114 &447784766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2308,9 +2352,9 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 0.89705884}
+        key0: {r: 1, g: 1, b: 1, a: 0}
         key1: {r: 1, g: 1, b: 1, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 0}
+        key2: {r: 0, g: 0, b: 0, a: 1}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -2325,17 +2369,17 @@ ParticleSystem:
         ctime6: 0
         ctime7: 0
         atime0: 0
-        atime1: 65535
-        atime2: 65535
+        atime1: 16384
+        atime2: 49151
         atime3: 65535
-        atime4: 0
+        atime4: 65535
         atime5: 0
         atime6: 0
         atime7: 0
         m_Mode: 0
         m_ColorSpace: 0
         m_NumColorKeys: 2
-        m_NumAlphaKeys: 2
+        m_NumAlphaKeys: 4
       minGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -6289,6 +6333,8 @@ MonoBehaviour:
   hoverEffect: {fileID: 832094313}
   audioSource: {fileID: 733144572}
   hoverSound: {fileID: 8300000, guid: 8a180e65fc9f31e4897f8ec71ab5036c, type: 3}
+  openSound: {fileID: 8300000, guid: 75afcdb530fb998448d01d527b5f1b69, type: 3}
+  closeSound: {fileID: 8300000, guid: f7fef1c9c32b4694886f24b44ec0ca75, type: 3}
 --- !u!1 &926292555
 GameObject:
   m_ObjectHideFlags: 0
@@ -6573,6 +6619,8 @@ MonoBehaviour:
   hoverEffect: {fileID: 832094313}
   audioSource: {fileID: 733144572}
   hoverSound: {fileID: 8300000, guid: 8a180e65fc9f31e4897f8ec71ab5036c, type: 3}
+  openSound: {fileID: 8300000, guid: 75afcdb530fb998448d01d527b5f1b69, type: 3}
+  closeSound: {fileID: 8300000, guid: f7fef1c9c32b4694886f24b44ec0ca75, type: 3}
 --- !u!1 &1039179237
 GameObject:
   m_ObjectHideFlags: 0
