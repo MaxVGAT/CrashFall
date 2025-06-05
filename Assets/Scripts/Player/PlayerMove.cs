@@ -21,6 +21,12 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private Collider2D playerCollider;
 
+    [Header("Run Smoke Effect")]
+    [SerializeField] private GameObject runSmokeTexture;
+    [SerializeField] private Transform smokeSpawnPoint;
+    [SerializeField] private float smokeSpawnCooldown = 0.15f;
+    private float lastSmokeTime;
+
     [Header("Jump")]
     [SerializeField] private float jumpSpeed = 15f;
     [SerializeField] private int maxJump = 2;
@@ -52,6 +58,12 @@ public class PlayerMove : MonoBehaviour
     {
         rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
 
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_run") && grounded && Mathf.Abs(horizontal) > 0.1f)
+        {
+            SpawnSmoke();
+
+        }
+
         grounded = GroundCheck();
         Gravity();
 
@@ -67,6 +79,8 @@ public class PlayerMove : MonoBehaviour
         animator.SetFloat("Speed", Mathf.Abs(horizontal));
         animator.SetBool("isGrounded", grounded);
         animator.SetFloat("verticalVelocity", rb.velocity.y);
+        Debug.Log("Current clip: " + animator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
+
     }
 
     private void Gravity()
@@ -165,5 +179,35 @@ public class PlayerMove : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(groundCheck.position, boxSize);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(smokeSpawnPoint.position, Vector3.one * 0.1f);
+    }
+
+    private void SpawnSmoke()
+    {
+        Debug.Log("SpawnSmoke called");
+
+        if (Time.time - lastSmokeTime > smokeSpawnCooldown)
+        {
+
+            Vector3 spawnPos = smokeSpawnPoint.position;
+
+            if (isFacingRight)
+            {
+                spawnPos.x = transform.position.x + Mathf.Abs(smokeSpawnPoint.localPosition.x);
+            }
+            else
+            {
+                spawnPos.x = transform.position.x - Mathf.Abs(smokeSpawnPoint.localPosition.x);
+            }
+
+            GameObject smoke = Instantiate(runSmokeTexture, smokeSpawnPoint.position, Quaternion.identity);
+
+            Destroy(smoke, 0.25f);
+            lastSmokeTime = Time.time;
+        }
     }
 }
+
+
