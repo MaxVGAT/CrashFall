@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -29,7 +30,7 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if(hoverEffect != null)
+        if (hoverEffect != null)
         {
             currentEffect.Stop();
             Destroy(currentEffect.gameObject, currentEffect.main.duration);
@@ -38,7 +39,7 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OpenSFX()
     {
-        if(audioSource != null)
+        if (audioSource != null)
         {
             audioSource.PlayOneShot(openSound);
         }
@@ -46,9 +47,17 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void CloseSFX()
     {
-        if(audioSource != null)
+        if (audioSource != null)
         {
             audioSource.PlayOneShot(closeSound);
+        }
+    }
+
+    public void MenuToGame()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartGame("InGame", "Tuto_Spawn_Point");
         }
     }
 }

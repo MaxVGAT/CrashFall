@@ -38,7 +38,22 @@ public class Teleport : MonoBehaviour
 
         if (isPlayerInside == true && isPortalActive == true && Input.GetKeyDown(KeyCode.E))
         {
-            TeleportPlayer();
+            if (CompareTag("Forest_TP"))
+            {
+                TeleportToForest();
+            }
+            else if (CompareTag("Tuto_Jump"))
+            {
+                TeleportToTutoJump();
+            }
+            else if(CompareTag("Tuto_Platform"))
+            {
+                TeleportToTutoPlatform();
+            }
+            else if(CompareTag("Tuto_Lobby"))
+            {
+                SpawnLobby();
+            }
         }
     }
     private void SetPortalActive(bool active)
@@ -68,8 +83,31 @@ public class Teleport : MonoBehaviour
         }
     }
 
-    void TeleportPlayer()
+    private void TeleportToForest()
     {
         Player.transform.position = new Vector2(-68f, -5.3f);
+    }
+
+    private void TeleportToTutoJump()
+    {
+        Player.transform.position = new Vector2(2.6f, 13f);
+    }
+
+    private void TeleportToTutoPlatform()
+    {
+        Player.transform.position = new Vector2(21.7f, 18f);
+    }
+
+    private void TeleportTutoToLobby()
+    {
+        Player.transform.position = new Vector2(3f, -3.3f);
+    }
+
+    public void SpawnLobby()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartGame("InGame", "Lobby_Spawn_Point");
+        }
     }
 }

@@ -6592,9 +6592,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1277216019}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: StartGame
+      - m_Target: {fileID: 929154612}
+        m_TargetAssemblyTypeName: ButtonHoverEffect, Assembly-CSharp
+        m_MethodName: MenuToGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

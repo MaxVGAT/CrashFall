@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Tilemaps;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor.Tilemaps;
+#endif
 
 public class Levers : MonoBehaviour
 {

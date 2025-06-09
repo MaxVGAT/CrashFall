@@ -5,8 +5,26 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     public Texture2D customCursor;
     public Vector2 hotspot = Vector2.zero;
+
+    public static string nextSpawn = "Tuto_Spawn_Point";
+    public static string nextScene = "InGame";
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject); // Avoid duplicates
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -20,8 +38,10 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
-    public void StartGame()
+    public void StartGame(string sceneName, string spawnPoint)
     {
-        SceneManager.LoadScene("InGame");
+        nextScene = sceneName;
+        nextSpawn = spawnPoint;
+        SceneManager.LoadScene(sceneName);
     }
 }

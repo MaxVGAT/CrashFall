@@ -7,6 +7,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+#if UNITY_EDITOR
+using static UnityEditor.Timeline.TimelinePlaybackControls;
+#endif
+
 public class PlayerMove : MonoBehaviour
 {
 
@@ -17,7 +21,7 @@ public class PlayerMove : MonoBehaviour
     private bool isFacingRight = true;
 
     [Header("Player")]
-    [SerializeField] private Transform player;
+    [SerializeField] public Transform player;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private Collider2D playerCollider;
 
@@ -54,8 +58,27 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private AudioClip walkSFX;
     private Coroutine fadeCoroutine;
 
+    [Header("Dash")]
+    [SerializeField] private float dashSpeed = 1f;
+    [SerializeField] private float dashDuration = 0.1f;
+
+    private bool isDashing = false;
+    private bool canDash;
     private void Start()
     {
+        if (!string.IsNullOrEmpty(GameManager.nextSpawn))
+        {
+            GameObject spawn = GameObject.Find(GameManager.nextSpawn);
+            if (spawn != null)
+            {
+                transform.position = spawn.transform.position;
+            }
+            else
+            {
+                Debug.LogWarning("Spawn point not found: " + GameManager.nextSpawn);
+            }
+        }
+
         playerCollider = GetComponent<Collider2D>();
         walkAudioSource.clip = walkSFX;
     }
@@ -67,6 +90,13 @@ public class PlayerMove : MonoBehaviour
         Gravity();
 
         bool isRunning = animator.GetCurrentAnimatorStateInfo(0).IsName("player_run") && grounded && Mathf.Abs(horizontal) > 0.1f;
+
+
+        if (Input.GetKeyDown(KeyCode.R) && canDash && !isDashing && Mathf.Abs(horizontal) > 0.01f)
+        {
+            UseDash();
+            
+        }
 
         if (isRunning)
         {
@@ -143,6 +173,11 @@ public class PlayerMove : MonoBehaviour
         if (grounded)
         {
             jumpsRemaining = maxJump;
+        }
+
+        if (grounded && !isDashing)
+        {
+            canDash = true;
         }
         return grounded;
     }
@@ -239,6 +274,29 @@ public class PlayerMove : MonoBehaviour
         source.Stop();
         source.volume = startVolume;
         fadeCoroutine = null;
+    }
+
+    private void UseDash()
+    {
+        float direction = isFacingRight ? 1f : -1f;
+        StartCoroutine(DashCoroutine(direction));
+    }
+
+    private IEnumerator DashCoroutine(float direction)
+    {
+        isDashing = true;
+        canDash = false;
+
+        float dashTime = 0f;
+
+        while (dashTime < dashDuration)
+        {
+            rb.velocity = new Vector2(direction * dashSpeed, rb.velocity.y);
+            dashTime += Time.deltaTime;
+            yield return null;
+        }
+
+        isDashing = false;
     }
 }
 

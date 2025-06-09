@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Platform
   - Trap
+  - Forest_TP
+  - Tuto_Jump
+  - Tuto_Platform
+  - Tuto_Lobby
   layers:
   - Default
   - TransparentFX
