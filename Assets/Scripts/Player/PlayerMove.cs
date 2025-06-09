@@ -34,7 +34,7 @@ public class PlayerMove : MonoBehaviour
 
     [Header("GroundCheck")]
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private Vector2 boxSize = new Vector2(0.8f, 0.1f);
+    [SerializeField] private Vector2 boxSize = new Vector2(0.8f, 0.4f);
     bool isOnPlatform;
     bool grounded;
 
@@ -49,38 +49,57 @@ public class PlayerMove : MonoBehaviour
     [Header("Camera")]
     [SerializeField] private SpriteRenderer spriteRenderer;
 
+    [Header("Sound")]
+    [SerializeField] private AudioSource walkAudioSource;
+    [SerializeField] private AudioClip walkSFX;
+    private Coroutine fadeCoroutine;
+
     private void Start()
     {
         playerCollider = GetComponent<Collider2D>();
+        walkAudioSource.clip = walkSFX;
     }
 
     private void Update()
     {
         rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_run") && grounded && Mathf.Abs(horizontal) > 0.1f)
-        {
-            SpawnSmoke();
-
-        }
-
         grounded = GroundCheck();
         Gravity();
 
+        bool isRunning = animator.GetCurrentAnimatorStateInfo(0).IsName("player_run") && grounded && Mathf.Abs(horizontal) > 0.1f;
+
+        if (isRunning)
+        {
+            SpawnSmoke();
+
+            if (!walkAudioSource.isPlaying)
+            {
+                if (fadeCoroutine != null)
+                {
+                    StopCoroutine(fadeCoroutine);
+                    fadeCoroutine = null;
+                }
+                walkAudioSource.volume = 0.05f;
+                walkAudioSource.loop = true;
+                walkAudioSource.Play();
+            }
+        }
+        else
+        {
+            if (walkAudioSource.isPlaying && fadeCoroutine == null)
+            {
+                fadeCoroutine = StartCoroutine(FadeOut(walkAudioSource, 0.35f));
+            }
+        }
+
         if (horizontal > 0 && !isFacingRight)
-        {
             Flip();
-        }
         else if (horizontal < 0 && isFacingRight)
-        {
             Flip();
-        }
 
         animator.SetFloat("Speed", Mathf.Abs(horizontal));
         animator.SetBool("isGrounded", grounded);
         animator.SetFloat("verticalVelocity", rb.velocity.y);
-        Debug.Log("Current clip: " + animator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
-
     }
 
     private void Gravity()
@@ -186,8 +205,6 @@ public class PlayerMove : MonoBehaviour
 
     private void SpawnSmoke()
     {
-        Debug.Log("SpawnSmoke called");
-
         if (Time.time - lastSmokeTime > smokeSpawnCooldown)
         {
 
@@ -207,6 +224,21 @@ public class PlayerMove : MonoBehaviour
             Destroy(smoke, 0.25f);
             lastSmokeTime = Time.time;
         }
+    }
+
+    private IEnumerator FadeOut(AudioSource source, float duration)
+    {
+        float startVolume = source.volume;
+
+        while (source.volume > 0f)
+        {
+            source.volume -= startVolume * Time.deltaTime / duration;
+            yield return null;
+        }
+
+        source.Stop();
+        source.volume = startVolume;
+        fadeCoroutine = null;
     }
 }
 

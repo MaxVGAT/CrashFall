@@ -9,15 +9,20 @@ public class Teleport : MonoBehaviour
     [Header("Player")]
     [SerializeField] private GameObject Player;
     //[SerializeField] private GameObject tpConfirmationPanel;
-    private bool isPlayerInside = false;
-
+    
     [Header("Disabled TP")]
     [SerializeField] private GameObject TP_Inactive;
 
     [Header("Active_TP")]
     [SerializeField] private GameObject TP_Active;
 
-    bool isPortalActive = false;
+    private bool isPortalActive = false;
+    private bool isPlayerInside = false;
+
+    private void Start()
+    {
+        TP_Active.SetActive(false);
+    }
 
     private void Update()
     {
@@ -36,7 +41,7 @@ public class Teleport : MonoBehaviour
             TeleportPlayer();
         }
     }
-    public void SetPortalActive(bool active)
+    private void SetPortalActive(bool active)
     {
         isPortalActive = active;
         TP_Active.SetActive(isPortalActive);
