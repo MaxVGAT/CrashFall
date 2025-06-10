@@ -195,17 +195,10 @@ public class PlayerMove : MonoBehaviour
 
     public void Drop(InputAction.CallbackContext context)
     {
-        if (context.performed && grounded && isOnPlatform && playerCollider.enabled)
+        if (context.performed && grounded && isOnPlatform)
         {
-            StartCoroutine(DisablePlayerCollider(0.20f));
+            StartCoroutine(TemporarilyIgnorePlatforms(0.20f));
         }
-    }
-
-    private IEnumerator DisablePlayerCollider(float disableTime)
-    {
-        playerCollider.enabled = false;
-        yield return new WaitForSeconds(disableTime);
-        playerCollider.enabled = true;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -298,6 +291,29 @@ public class PlayerMove : MonoBehaviour
 
         isDashing = false;
     }
+
+    private IEnumerator TemporarilyIgnorePlatforms(float duration)
+    {
+        ContactFilter2D contactFilter = new ContactFilter2D();
+        contactFilter.layerMask = platformLayer;
+        contactFilter.useLayerMask = true;
+
+        List<Collider2D> results = new List<Collider2D>();
+        Physics2D.OverlapCollider(playerCollider, contactFilter, results);
+
+        foreach (var platform in results)
+        {
+            Physics2D.IgnoreCollision(playerCollider, platform, true);
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        foreach(var platform in results)
+        {
+            Physics2D.IgnoreCollision(playerCollider, platform, false);
+        }
+    }
+
 }
 
 

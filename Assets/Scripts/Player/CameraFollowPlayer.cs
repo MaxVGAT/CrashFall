@@ -6,11 +6,11 @@ public class CameraFollowPlayer : MonoBehaviour
 {
 
     [Header("Camera")]
-    [SerializeField] private Transform target;
-    [SerializeField] private float cameraSpeed = 1f;
-    [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 0f, -10f);
+    [SerializeField] public Transform target;
+    [SerializeField] public float cameraSpeed = 1f;
+    [SerializeField] public Vector3 cameraOffset = new Vector3(0f, 0f, -10f);
 
-    private void LateUpdate()
+    public void LateUpdate()
     {
         Vector3 targetPosition = target.position + cameraOffset;
 

@@ -24,7 +24,7 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (audioSource != null && hoverSound != null)
         {
-            audioSource.PlayOneShot(hoverSound);
+            SoundManager.Instance.PlaySFX(hoverSound);
         }
     }
 
@@ -41,7 +41,7 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         if (audioSource != null)
         {
-            audioSource.PlayOneShot(openSound);
+            SoundManager.Instance.PlaySFX(openSound);
         }
     }
 
@@ -49,7 +49,7 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         if (audioSource != null)
         {
-            audioSource.PlayOneShot(closeSound);
+            SoundManager.Instance.PlaySFX(closeSound);
         }
     }
 
@@ -60,4 +60,6 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
             GameManager.Instance.StartGame("InGame", "Tuto_Spawn_Point");
         }
     }
+
+
 }

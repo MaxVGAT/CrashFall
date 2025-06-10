@@ -2,26 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using static Teleport;
 
 public class Teleport : MonoBehaviour
 {
 
+    public enum TeleportType { Forest, TutoJump, TutoPlatform, TutoLevel, Lobby }
+
+
     [Header("Player")]
     [SerializeField] private GameObject Player;
     //[SerializeField] private GameObject tpConfirmationPanel;
+
+    [Header("Camera")]
+    [SerializeField] private CameraFollowPlayer cameraFollow;
+
+    [Header("TP States")]
+    [SerializeField] private GameObject TP_Inactive_Forest;
+    [SerializeField] private GameObject TP_Active_Forest;
+
+    [Header("Teleporters")]
+    [SerializeField] private TeleportType TP_Type;
     
-    [Header("Disabled TP")]
-    [SerializeField] private GameObject TP_Inactive;
-
-    [Header("Active_TP")]
-    [SerializeField] private GameObject TP_Active;
-
     private bool isPortalActive = false;
     private bool isPlayerInside = false;
 
     private void Start()
     {
-        TP_Active.SetActive(false);
+        cameraFollow.cameraOffset = new Vector3(0, 2f, -10f);
+        TP_Active_Forest.SetActive(false);
+        Debug.Log($"{gameObject.name} TP_Type is set to: {TP_Type}");
     }
 
     private void Update()
@@ -36,31 +46,48 @@ public class Teleport : MonoBehaviour
             SetPortalActive(false);
         }
 
-        if (isPlayerInside == true && isPortalActive == true && Input.GetKeyDown(KeyCode.E))
+        if (isPlayerInside == true && Input.GetKeyDown(KeyCode.E))
         {
-            if (CompareTag("Forest_TP"))
+            Debug.Log("Teleporting using type: " + TP_Type);
+            switch (TP_Type)
             {
-                TeleportToForest();
-            }
-            else if (CompareTag("Tuto_Jump"))
-            {
-                TeleportToTutoJump();
-            }
-            else if(CompareTag("Tuto_Platform"))
-            {
-                TeleportToTutoPlatform();
-            }
-            else if(CompareTag("Tuto_Lobby"))
-            {
-                SpawnLobby();
+               
+                case TeleportType.Forest:
+                    if (TP_Active_Forest == true)
+                    {
+                        TeleportToForest();
+                    }
+                    break;
+                case TeleportType.TutoJump:
+                    {
+                        TeleportToTutoJump();
+                        break;
+                    }
+                case TeleportType.TutoPlatform:
+                    {
+                        TeleportToTutoPlatform();
+                        break;
+                    }
+                case TeleportType.TutoLevel:
+                    {
+                        TeleportToTutoLevel();
+                        break;
+                    }
+                case TeleportType.Lobby:
+                    {
+                        TeleportTutoToLobby();
+                        break;
+                    }
+
             }
         }
     }
+
     private void SetPortalActive(bool active)
     {
         isPortalActive = active;
-        TP_Active.SetActive(isPortalActive);
-        TP_Inactive.SetActive(!isPortalActive);
+        TP_Active_Forest.SetActive(isPortalActive);
+        TP_Inactive_Forest.SetActive(!isPortalActive);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -68,8 +95,7 @@ public class Teleport : MonoBehaviour
         if(collision.CompareTag("Player"))
         {
             isPlayerInside = true;
-            Debug.Log(isPlayerInside);
-            //tpConfirmationPanel.SetActive(true);
+            InteractionPrompt.Instance.ShowPrompt();
         }
     }
 
@@ -78,8 +104,7 @@ public class Teleport : MonoBehaviour
         if(collision.CompareTag("Player"))
         {
             isPlayerInside = false;
-            Debug.Log(isPlayerInside);
-            //tpConfirmationPanel.SetActive(false);
+            InteractionPrompt.Instance.HidePrompt();
         }
     }
 
@@ -98,8 +123,14 @@ public class Teleport : MonoBehaviour
         Player.transform.position = new Vector2(21.7f, 18f);
     }
 
+    private void TeleportToTutoLevel()
+    {
+        Player.transform.position = new Vector2(47f, 16.5f);
+    }
+
     private void TeleportTutoToLobby()
     {
+        cameraFollow.cameraOffset = new Vector3(0, 0f, -10f);
         Player.transform.position = new Vector2(3f, -3.3f);
     }
 

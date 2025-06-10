@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public static string nextSpawn = "Tuto_Spawn_Point";
     public static string nextScene = "InGame";
 
+
     private void Awake()
     {
         if (Instance == null)
@@ -30,6 +31,16 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Cursor.SetCursor(customCursor, hotspot, CursorMode.Auto);
+    }
+
+    void OnDisable()
+    {
+        Debug.Log("Settings disabled at " + Time.time);
+    }
+
+    void OnDestroy()
+    {
+        Debug.Log("Settings destroyed at " + Time.time);
     }
 
     // Update is called once per frame

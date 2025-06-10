@@ -18,9 +18,19 @@ public class ShowHideSettings : MonoBehaviour
 
     private void Start()
     {
+
+        if (settingsGroup != null)
+        {
+            settingsGroup.alpha = 1;
+            settingsGroup.interactable = true;
+            settingsGroup.blocksRaycasts = true;
+        }
+
         settingsGroup.alpha = 0;
         settingsGroup.interactable = false;
         settingsGroup.blocksRaycasts = false;
+
+
     }
 
     public void ShowTutorial()
@@ -76,6 +86,21 @@ public class ShowHideSettings : MonoBehaviour
     public void LoadVolume()
     {
         volumeSlider.value = PlayerPrefs.GetFloat("soundVolume");
+    }
+
+    public void ShowSettingsDATA3()
+    {
+        Debug.Log("SettingsGroup is null? " + (settingsGroup == null));
+        if (settingsGroup != null)
+        {
+            settingsGroup.alpha = 1;
+            settingsGroup.interactable = true;
+            settingsGroup.blocksRaycasts = true;
+        }
+        else
+        {
+            Debug.LogError("SettingsGroup reference lost or destroyed!");
+        }
     }
 
 }
