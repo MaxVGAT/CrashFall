@@ -10,6 +10,8 @@ TagManager:
   - Tuto_Jump
   - Tuto_Platform
   - Tuto_Lobby
+  - Lever
+  - Knight_NPC
   layers:
   - Default
   - TransparentFX
@@ -53,6 +55,9 @@ TagManager:
   - name: Ground
     uniqueID: 754402127
     locked: 0
+  - name: BackPillars
+    uniqueID: 3115795091
+    locked: 0
   - name: Items
     uniqueID: 2901715537
     locked: 0
@@ -64,4 +69,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3747884531
+    locked: 0
+  - name: FrontPillars
+    uniqueID: 212573611
     locked: 0

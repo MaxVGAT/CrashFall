@@ -92,7 +92,7 @@ public class PlayerMove : MonoBehaviour
         bool isRunning = animator.GetCurrentAnimatorStateInfo(0).IsName("player_run") && grounded && Mathf.Abs(horizontal) > 0.1f;
 
 
-        if (Input.GetKeyDown(KeyCode.R) && canDash && !isDashing && Mathf.Abs(horizontal) > 0.01f)
+        if (Input.GetKeyDown(KeyCode.LeftControl) && canDash && !isDashing && Mathf.Abs(horizontal) > 0.01f)
         {
             UseDash();
             

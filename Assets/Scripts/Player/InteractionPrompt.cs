@@ -18,7 +18,6 @@ public class InteractionPrompt : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        HidePrompt();
         baseScale = prompt.transform.localScale;
     }
 
@@ -26,6 +25,7 @@ public class InteractionPrompt : MonoBehaviour
     {
         if (prompt.activeSelf)
         {
+            Debug.Log("Update running - prompt is active"); 
             prompt.transform.position = player.position + promptOffset;
             prompt.transform.forward = Camera.main.transform.forward;
 
@@ -38,11 +38,20 @@ public class InteractionPrompt : MonoBehaviour
 
     public void ShowPrompt()
     {
+        Debug.Log("ShowPrompt called");
+        Debug.Log("Prompt object: " + (prompt != null));
+        Debug.Log("Prompt active before: " + prompt.activeSelf);
+
         prompt.SetActive(true);
+
+        Debug.Log("Prompt active after: " + prompt.activeSelf);
+        Debug.Log("Prompt position: " + prompt.transform.position);
+        Debug.Log("Player position: " + player.position);
     }
 
     public void HidePrompt()
     {
+        Debug.Log("HidePrompt called from: " + System.Environment.StackTrace);
         prompt.SetActive(false);
     }
 
