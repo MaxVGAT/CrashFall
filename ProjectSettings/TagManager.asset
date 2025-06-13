@@ -6,12 +6,13 @@ TagManager:
   tags:
   - Platform
   - Trap
-  - Forest_TP
-  - Tuto_Jump
-  - Tuto_Platform
-  - Tuto_Lobby
-  - Lever
-  - Knight_NPC
+  - NPC_Knight
+  - TP_Tuto1
+  - TP_Tuto2
+  - TP_Tuto3
+  - TP_Lobby
+  - TP_Forest
+  - TP_City
   layers:
   - Default
   - TransparentFX

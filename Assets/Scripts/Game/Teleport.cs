@@ -26,12 +26,12 @@ public class Teleport : MonoBehaviour
     
     private bool isPortalActive = false;
     private bool isPlayerInside = false;
+    public static Teleport currentTeleport;
 
     private void Start()
     {
         cameraFollow.cameraOffset = new Vector3(0, 2f, -10f);
         TP_Active_Forest.SetActive(false);
-        Debug.Log($"{gameObject.name} TP_Type is set to: {TP_Type}");
     }
 
     private void Update()
@@ -46,14 +46,17 @@ public class Teleport : MonoBehaviour
             SetPortalActive(false);
         }
 
-        if (isPlayerInside == true && Input.GetKeyDown(KeyCode.E))
+        if (Teleport.currentTeleport == this && Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("Teleporting using type: " + TP_Type);
+            Debug.Log($"--- TELEPORT TRIGGERED ---");
+            Debug.Log($"Teleport Type: {TP_Type}");
+            Debug.Log($"Player position before: {Player.transform.position}");
+
             switch (TP_Type)
             {
                
                 case TeleportType.Forest:
-                    if (TP_Active_Forest == true)
+                    if (TP_Active_Forest.activeSelf)
                     {
                         TeleportToForest();
                     }
@@ -92,20 +95,21 @@ public class Teleport : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player"))
-        {
-            isPlayerInside = true;
-            InteractionPrompt.Instance.ShowPrompt();
-        }
+        if (!collision.CompareTag("Player")) return;
+
+        currentTeleport = this;
+        InteractionPrompt.Instance.ShowPrompt();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player"))
+        if (!collision.CompareTag("Player")) return;
+
+        if(currentTeleport == this)
         {
-            isPlayerInside = false;
-            InteractionPrompt.Instance.HidePrompt();
+            currentTeleport = null;
         }
+        InteractionPrompt.Instance.HidePrompt();
     }
 
     private void TeleportToForest()
@@ -120,7 +124,9 @@ public class Teleport : MonoBehaviour
 
     private void TeleportToTutoPlatform()
     {
-        Player.transform.position = new Vector2(21.7f, 18f);
+        Vector2 newPos = new Vector2(21.7f, 18f);
+        Debug.Log($"ENTERED Teleporter | Type: {TP_Type} | Object: {gameObject.name}");
+        Player.transform.position = newPos;
     }
 
     private void TeleportToTutoLevel()

@@ -175,7 +175,7 @@ public class PlayerMove : MonoBehaviour
             jumpsRemaining = maxJump;
         }
 
-        if (grounded && !isDashing)
+        if (!grounded && !isDashing)
         {
             canDash = true;
         }
@@ -278,6 +278,8 @@ public class PlayerMove : MonoBehaviour
     private IEnumerator DashCoroutine(float direction)
     {
         isDashing = true;
+        animator.SetBool("isDashing", true);
+
         canDash = false;
 
         float dashTime = 0f;
@@ -290,6 +292,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         isDashing = false;
+        animator.SetBool("isDashing", false);
     }
 
     private IEnumerator TemporarilyIgnorePlatforms(float duration)

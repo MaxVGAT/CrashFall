@@ -1,58 +1,77 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class InteractionPrompt : MonoBehaviour
 {
-    public static InteractionPrompt Instance;
+    public static InteractionPrompt Instance { get; private set; }
 
-    public Transform player;
-    public GameObject prompt;
-    public Vector3 promptOffset = new Vector3(0, 1.5f, 0);
-    public float pulseSpeed = 2f;
-    public float maxPulseSize = 3f;
-    public float minPulseSize = 1f;
+    [SerializeField] private Transform player;
+    [SerializeField] private GameObject prompt;
+    [SerializeField] private Vector3 promptOffset = new Vector3(0, 1.5f, 0);
+    [SerializeField] private float pulseSpeed = 2f;
+    [SerializeField] private float maxPulseSize = 3f;
+    [SerializeField] private float minPulseSize = 1f;
 
     private Vector3 baseScale;
+    private Camera mainCamera;
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
         Instance = this;
-        baseScale = prompt.transform.localScale;
+
+        if (prompt != null)
+        {
+            baseScale = prompt.transform.localScale;
+            prompt.SetActive(false);
+        }
+
+        mainCamera = Camera.main;
     }
 
     private void Update()
     {
-        if (prompt.activeSelf)
+
+        if (prompt == null || !prompt.activeSelf || player == null || mainCamera == null)
         {
-            Debug.Log("Update running - prompt is active"); 
+            return;
+        }
+
             prompt.transform.position = player.position + promptOffset;
-            prompt.transform.forward = Camera.main.transform.forward;
+            prompt.transform.forward = mainCamera.transform.forward;
 
             float normalizedSin = (Mathf.Sin(Time.time * pulseSpeed) + 1f) / 2f;
             float scale = Mathf.Lerp(minPulseSize, maxPulseSize, normalizedSin);
             prompt.transform.localScale = baseScale * scale;
-        }
 
     }
 
     public void ShowPrompt()
     {
-        Debug.Log("ShowPrompt called");
-        Debug.Log("Prompt object: " + (prompt != null));
-        Debug.Log("Prompt active before: " + prompt.activeSelf);
-
-        prompt.SetActive(true);
-
-        Debug.Log("Prompt active after: " + prompt.activeSelf);
-        Debug.Log("Prompt position: " + prompt.transform.position);
-        Debug.Log("Player position: " + player.position);
+        if (prompt != null && !prompt.activeSelf)
+        {
+            prompt.SetActive(true);
+        }
     }
 
     public void HidePrompt()
     {
-        Debug.Log("HidePrompt called from: " + System.Environment.StackTrace);
-        prompt.SetActive(false);
+        if (prompt != null && prompt.activeSelf)
+        {
+            prompt.SetActive(false);
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 
 }
