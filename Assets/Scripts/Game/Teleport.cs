@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static Teleport;
 
 public class Teleport : MonoBehaviour
 {
 
-    public enum TeleportType { Forest, TutoJump, TutoPlatform, TutoLevel, Lobby }
+    public enum TeleportType { Forest, TutoJump, TutoPlatform, TutoLevel, Lobby, City }
 
 
     [Header("Player")]
     [SerializeField] private GameObject Player;
-    //[SerializeField] private GameObject tpConfirmationPanel;
 
     [Header("Camera")]
     [SerializeField] private CameraFollowPlayer cameraFollow;
@@ -25,17 +25,17 @@ public class Teleport : MonoBehaviour
     [SerializeField] private TeleportType TP_Type;
     
     private bool isPortalActive = false;
-    private bool isPlayerInside = false;
     public static Teleport currentTeleport;
 
     private void Start()
     {
-        cameraFollow.cameraOffset = new Vector3(0, 2f, -10f);
         TP_Active_Forest.SetActive(false);
     }
 
     private void Update()
     {
+        cameraFollow.cameraOffset = new Vector3(0, 2f, -10f);
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SetPortalActive(true);
@@ -48,10 +48,6 @@ public class Teleport : MonoBehaviour
 
         if (Teleport.currentTeleport == this && Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log($"--- TELEPORT TRIGGERED ---");
-            Debug.Log($"Teleport Type: {TP_Type}");
-            Debug.Log($"Player position before: {Player.transform.position}");
-
             switch (TP_Type)
             {
                
@@ -81,8 +77,18 @@ public class Teleport : MonoBehaviour
                         TeleportTutoToLobby();
                         break;
                     }
+                case TeleportType.City:
+                    {
+                        TeleportToCityLevel();
+                        break;
+                    }
 
             }
+        }
+
+        if(gameObject.CompareTag("NPC_Knight") && Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("Talking to knight");
         }
     }
 
@@ -138,6 +144,11 @@ public class Teleport : MonoBehaviour
     {
         cameraFollow.cameraOffset = new Vector3(0, 0f, -10f);
         Player.transform.position = new Vector2(3f, -3.3f);
+    }
+
+    private void TeleportToCityLevel()
+    {
+        SceneManager.LoadScene("CityLevel");
     }
 
     public void SpawnLobby()
