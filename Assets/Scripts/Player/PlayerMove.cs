@@ -64,6 +64,8 @@ public class PlayerMove : MonoBehaviour
 
     private bool isDashing = false;
     private bool canDash;
+    private float deathCounter;
+
     private void Start()
     {
         if (!string.IsNullOrEmpty(GameManager.nextSpawn))
@@ -210,7 +212,8 @@ public class PlayerMove : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Trap"))
         {
-            SceneManager.LoadScene("SampleScene");
+            player.transform.position = new Vector2(3f, -3.3f);
+            deathCounter++;
         }
     }
 

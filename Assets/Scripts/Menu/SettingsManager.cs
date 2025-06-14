@@ -9,6 +9,7 @@ public class ShowHideSettings : MonoBehaviour
     [Header("References")]
     public CanvasGroup mainMenuGroup;
     public CanvasGroup settingsGroup;
+    public CanvasGroup creditsGroup;
     public float fadeTime = 0.3f;
 
 
@@ -26,11 +27,20 @@ public class ShowHideSettings : MonoBehaviour
             settingsGroup.blocksRaycasts = true;
         }
 
+        if (creditsGroup != null)
+        {
+            creditsGroup.alpha = 1;
+            creditsGroup.interactable = true;
+            creditsGroup.blocksRaycasts = true;
+        }
+
         settingsGroup.alpha = 0;
         settingsGroup.interactable = false;
         settingsGroup.blocksRaycasts = false;
 
-
+        creditsGroup.alpha = 0;
+        creditsGroup.interactable = false;
+        creditsGroup.blocksRaycasts = false;
     }
 
     public void ShowTutorial()
@@ -65,6 +75,24 @@ public class ShowHideSettings : MonoBehaviour
         mainMenuGroup.interactable = true;
     }
 
+    public void ShowCredits()
+    {
+        creditsGroup.alpha = 1;
+        creditsGroup.interactable = true;
+        creditsGroup.blocksRaycasts = true;
+
+        mainMenuGroup.interactable = false;
+    }
+
+    public void HideCredits()
+    {
+        creditsGroup.alpha = 0;
+        creditsGroup.interactable = false;
+        creditsGroup.blocksRaycasts = false;
+
+        mainMenuGroup.interactable = true;
+    }
+
     //
     // VOLUME SETTINGS
     //
@@ -87,20 +115,4 @@ public class ShowHideSettings : MonoBehaviour
     {
         volumeSlider.value = PlayerPrefs.GetFloat("soundVolume");
     }
-
-    public void ShowSettingsDATA3()
-    {
-        Debug.Log("SettingsGroup is null? " + (settingsGroup == null));
-        if (settingsGroup != null)
-        {
-            settingsGroup.alpha = 1;
-            settingsGroup.interactable = true;
-            settingsGroup.blocksRaycasts = true;
-        }
-        else
-        {
-            Debug.LogError("SettingsGroup reference lost or destroyed!");
-        }
-    }
-
 }

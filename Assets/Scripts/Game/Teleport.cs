@@ -8,7 +8,7 @@ using static Teleport;
 public class Teleport : MonoBehaviour
 {
 
-    public enum TeleportType { Forest, TutoJump, TutoPlatform, TutoLevel, Lobby, City }
+    public enum TeleportType { ForestIntro, Forest, TutoJump, TutoPlatform, TutoLevel, Lobby, City, CastleIntro, Castle }
 
 
     [Header("Player")]
@@ -34,27 +34,34 @@ public class Teleport : MonoBehaviour
 
     private void Update()
     {
+
         cameraFollow.cameraOffset = new Vector3(0, 2f, -10f);
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SetPortalActive(true);
+            Debug.Log("TP_Active_Forest is now: " + TP_Active_Forest.activeSelf);
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             SetPortalActive(false);
+            Debug.Log(TP_Active_Forest.activeSelf);
         }
 
         if (Teleport.currentTeleport == this && Input.GetKeyDown(KeyCode.E))
         {
             switch (TP_Type)
             {
-               
                 case TeleportType.Forest:
+                    {
+                        TeleportToForestLevel();
+                        break;
+                    }
+                case TeleportType.ForestIntro:
                     if (TP_Active_Forest.activeSelf)
                     {
-                        TeleportToForest();
+                        TeleportToForestIntro();
                     }
                     break;
                 case TeleportType.TutoJump:
@@ -82,6 +89,16 @@ public class Teleport : MonoBehaviour
                         TeleportToCityLevel();
                         break;
                     }
+                case TeleportType.CastleIntro:
+                    {
+                        TeleportToCastleIntro();
+                        break;
+                    }
+                case TeleportType.Castle:
+                    {
+                        TeleportToCastleLevel();
+                        break;
+                    }
 
             }
         }
@@ -103,6 +120,8 @@ public class Teleport : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
+
+        Debug.Log(gameObject.name + " | TP_Type: " + TP_Type);
         currentTeleport = this;
         InteractionPrompt.Instance.ShowPrompt();
     }
@@ -118,9 +137,24 @@ public class Teleport : MonoBehaviour
         InteractionPrompt.Instance.HidePrompt();
     }
 
-    private void TeleportToForest()
+    private void TeleportToForestIntro()
     {
-        Player.transform.position = new Vector2(-68f, -5.3f);
+        Player.transform.position = new Vector2(-67f, -12.3f);
+    }
+
+    private void TeleportToForestLevel()
+    {
+        SceneManager.LoadScene("ForestLevel");
+    }
+
+    private void TeleportToCastleIntro()
+    {
+        Player.transform.position = new Vector2(-50f, -12.3f);
+    }
+
+    private void TeleportToCastleLevel()
+    {
+        SceneManager.LoadScene("CastleLevel");
     }
 
     private void TeleportToTutoJump()
@@ -142,7 +176,6 @@ public class Teleport : MonoBehaviour
 
     private void TeleportTutoToLobby()
     {
-        cameraFollow.cameraOffset = new Vector3(0, 0f, -10f);
         Player.transform.position = new Vector2(3f, -3.3f);
     }
 
