@@ -8437,22 +8437,23 @@ MonoBehaviour:
   player: {fileID: 1254344087}
   moveSpeed: 3
   playerCollider: {fileID: 1254344090}
+  spriteRenderer: {fileID: 1254344089}
+  animator: {fileID: 1254344088}
+  walkAudioSource: {fileID: 1254344094}
+  walkSFX: {fileID: 8300000, guid: e597f4379d1c4414ca9fd17ed883732c, type: 3}
   runSmokeTexture: {fileID: 5541858687348146027, guid: a0f811e6433c37f469a98ddb6aa0fd68, type: 3}
   smokeSpawnPoint: {fileID: 1300386393}
   smokeSpawnCooldown: 0.1
-  jumpSpeed: 7
-  maxJump: 1
-  groundCheck: {fileID: 939758440}
-  boxSize: {x: 0.8, y: 0.1}
   baseGravity: 2
   maxFallSpeed: 18
   fallSpeedMultiplier: 2
-  animator: {fileID: 1254344088}
-  spriteRenderer: {fileID: 1254344089}
-  walkAudioSource: {fileID: 1254344094}
-  walkSFX: {fileID: 8300000, guid: e597f4379d1c4414ca9fd17ed883732c, type: 3}
+  jumpSpeed: 7
+  groundCheck: {fileID: 939758440}
+  boxSize: {x: 0.8, y: 0.1}
   dashSpeed: 25
   dashDuration: 0.15
+  canDoubleJump: 0
+  hasUnlockedDash: 0
 --- !u!114 &1254344093
 MonoBehaviour:
   m_ObjectHideFlags: 0

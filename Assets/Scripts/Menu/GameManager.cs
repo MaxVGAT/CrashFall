@@ -5,15 +5,26 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    //==================================================
+    // SINGLETON
+    //==================================================
+    public static GameManager Instance { get; private set; }
 
+    //==================================================
+    // CURSOR
+    //==================================================
     public Texture2D customCursor;
     public Vector2 hotspot = Vector2.zero;
 
+    //==================================================
+    // SCENE & SPAWN CONTROL
+    //==================================================
     public static string nextSpawn = "Tuto_Spawn_Point";
     public static string nextScene = "InGame";
 
-
+    //==================================================
+    // LIFECYCLE
+    //==================================================
     private void Awake()
     {
         if (Instance == null)
@@ -27,7 +38,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         Cursor.SetCursor(customCursor, hotspot, CursorMode.Auto);
@@ -43,7 +53,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("Settings destroyed at " + Time.time);
     }
 
-    // Update is called once per frame
+    //==================================================
+    // GAME FLOW
+    //==================================================
     public void ExitGame()
     {
         Application.Quit();

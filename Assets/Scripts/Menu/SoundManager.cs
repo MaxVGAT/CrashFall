@@ -1,85 +1,60 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager Instance;
+    //==============================
+    //          SINGLETON
+    //==============================
+    public static SoundManager Instance { get; private set; }
 
-    [Header("Audio Source")]
-    public AudioSource sfxSource;
-    public AudioSource musicSource;
+    //==============================
+    //        AUDIO SOURCES
+    //==============================
+    [Header("Audio Sources")]
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioSource musicSource;
 
+    //==============================
+    //         AUDIO CLIPS
+    //==============================
     [Header("Audio Clips")]
-    public AudioClip lobbyMusic;
-    public AudioClip titleMusic;
+    [SerializeField] private AudioClip lobbyMusic;
+    [SerializeField] private AudioClip titleMusic;
 
+    //==============================
+    //        SOUND SETTINGS
+    //==============================
     [Header("Sound Settings")]
-    public float sfxVolume = 0.3f;
-    public float musicVolume = 0.1f;
+    [SerializeField, Range(0f, 1f)] private float sfxVolume = 0.3f;
+    [SerializeField, Range(0f, 1f)] private float musicVolume = 0.1f;
 
+    //==============================
+    //         UNITY EVENTS
+    //==============================
     private void Awake()
     {
-        if(Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.1f);
-            sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.3f);
-        }
-        else
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
-        }
-
-        sfxSource.volume = sfxVolume;
-        musicSource.volume = musicVolume;
-
-    }
-
-    public void PlaySFX(AudioClip clip)
-    {
-        sfxSource.PlayOneShot(clip, sfxVolume);
-    }
-
-    public void PlayMusic(AudioClip musicClip, bool loop = true)
-    {
-        if (musicSource.clip == musicClip && musicSource.isPlaying)
-        {
             return;
         }
 
-        musicSource.clip = musicClip;
-        musicSource.loop = loop;
-        musicSource.volume = musicVolume;
-        musicSource.Play();
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        musicVolume = PlayerPrefs.GetFloat("MusicVolume", musicVolume);
+        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", sfxVolume);
+
+        ApplyVolumes();
     }
+
     private void Start()
     {
         OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
-    public void StopMusic()
-    {
-        musicSource.Stop();
-    }
-
-    public void SetMusicVolume(float volume)
-    {
-        musicVolume = volume;
-        musicSource.volume = musicVolume;
-    }
-
-    public void SetSFXVolume(float volume)
-    {
-        sfxVolume = volume;
-        sfxSource.volume = sfxVolume;
-
-    }
-
-    void OnEnable()
+    private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -89,10 +64,11 @@ public class SoundManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    //==============================
+    //       SCENE HANDLING
+    //==============================
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-
-        
         switch (scene.name)
         {
             case "InGame":
@@ -102,5 +78,55 @@ public class SoundManager : MonoBehaviour
                 PlayMusic(titleMusic);
                 break;
         }
+    }
+
+    //==============================
+    //        AUDIO PLAYBACK
+    //==============================
+    public void PlaySFX(AudioClip clip)
+    {
+        if (clip == null) return;
+        sfxSource.PlayOneShot(clip, sfxVolume);
+    }
+
+    public void PlayMusic(AudioClip musicClip, bool loop = true)
+    {
+        if (musicSource.clip == musicClip && musicSource.isPlaying) return;
+
+        musicSource.clip = musicClip;
+        musicSource.loop = loop;
+        musicSource.volume = musicVolume;
+        musicSource.Play();
+    }
+
+    public void StopMusic()
+    {
+        musicSource.Stop();
+    }
+
+    //==============================
+    //        VOLUME CONTROLS
+    //==============================
+    public void SetMusicVolume(float volume)
+    {
+        musicVolume = Mathf.Clamp01(volume);
+        musicSource.volume = musicVolume;
+        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        sfxVolume = Mathf.Clamp01(volume);
+        sfxSource.volume = sfxVolume;
+        PlayerPrefs.SetFloat("SFXVolume", sfxVolume);
+    }
+
+    //==============================
+    //      INTERNAL HELPERS
+    //==============================
+    private void ApplyVolumes()
+    {
+        musicSource.volume = musicVolume;
+        sfxSource.volume = sfxVolume;
     }
 }

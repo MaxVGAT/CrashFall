@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    //==================================================
+    // REFERENCES
+    //==================================================
     public ParticleSystem hoverEffect;
     public AudioSource audioSource;
     public AudioClip hoverSound;
@@ -14,6 +17,9 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private ParticleSystem currentEffect;
 
+    //==================================================
+    // UI HOVER EFFECT
+    //==================================================
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (hoverEffect != null)
@@ -37,6 +43,9 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
     }
 
+    //==================================================
+    // SFX HANDLERS
+    //==================================================
     public void OpenSFX()
     {
         if (audioSource != null)
@@ -53,6 +62,9 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
     }
 
+    //==================================================
+    // SCENE TRANSITION
+    //==================================================
     public void MenuToGame()
     {
         if (GameManager.Instance != null)
@@ -60,6 +72,4 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
             GameManager.Instance.StartGame("InGame", "Tuto_Spawn_Point");
         }
     }
-
-
 }

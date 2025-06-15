@@ -8,14 +8,25 @@ using UnityEditor.Tilemaps;
 
 public class Levers : MonoBehaviour
 {
+    // ----------------------------------------
+    // LEVER STATE
+    // ----------------------------------------
     [Header("Lever State")]
     [SerializeField] private GameObject Inactive_Lever;
     [SerializeField] private GameObject Active_Lever;
 
+
+    // ----------------------------------------
+    // FENCE ELEMENTS
+    // ----------------------------------------
     [Header("Fence")]
     [SerializeField] private Transform Left_Gate;
     [SerializeField] private Transform Right_Gate;
 
+
+    // ----------------------------------------
+    // FENCE STATE
+    // ----------------------------------------
     [Header("Fence State")]
     [SerializeField] private Vector3 leftClosedLocalPos;
     [SerializeField] private Vector3 rightClosedLocalPos;
@@ -24,10 +35,18 @@ public class Levers : MonoBehaviour
 
     [SerializeField] private Collider2D leftGateCollider;
     [SerializeField] private Collider2D rightGateCollider;
-    
+
+
+    // ----------------------------------------
+    // INTERNAL STATE
+    // ----------------------------------------
     private bool isPlayerInside = false;
     private bool isLeverActive = false;
 
+
+    // ----------------------------------------
+    // UNITY EVENTS
+    // ----------------------------------------
     private void Start()
     {
         Active_Lever.SetActive(false);
@@ -50,7 +69,7 @@ public class Levers : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
@@ -58,13 +77,6 @@ public class Levers : MonoBehaviour
             Debug.Log(isPlayerInside);
             //tpConfirmationPanel.SetActive(true);
         }
-    }
-
-    public void SetLeverActive(bool active)
-    {
-        isLeverActive = active;
-        Active_Lever.SetActive(isLeverActive);
-        Inactive_Lever.SetActive(!isLeverActive);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -75,6 +87,17 @@ public class Levers : MonoBehaviour
             Debug.Log(isPlayerInside);
             //tpConfirmationPanel.SetActive(false);
         }
+    }
+
+
+    // ----------------------------------------
+    // LEVER & FENCE CONTROL
+    // ----------------------------------------
+    public void SetLeverActive(bool active)
+    {
+        isLeverActive = active;
+        Active_Lever.SetActive(isLeverActive);
+        Inactive_Lever.SetActive(!isLeverActive);
     }
 
     private void ToggleLeverAndFence()
@@ -95,6 +118,10 @@ public class Levers : MonoBehaviour
         }
     }
 
+
+    // ----------------------------------------
+    // GATE ANIMATION
+    // ----------------------------------------
     private void OpenFence()
     {
         Left_Gate.localPosition = leftOpenedLocalPos;

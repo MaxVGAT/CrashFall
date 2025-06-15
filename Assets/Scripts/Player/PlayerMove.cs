@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.EventSystems;
@@ -13,7 +12,9 @@ using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerMove : MonoBehaviour
 {
-
+    //==================================================
+    // REFERENCES
+    //==================================================
     public Rigidbody2D rb;
     public LayerMask groundLayer;
     public LayerMask platformLayer;
@@ -25,16 +26,41 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private Collider2D playerCollider;
 
+    [Header("Camera")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
+
+    [Header("Animations")]
+    [SerializeField] private Animator animator;
+
+    [Header("Sound")]
+    [SerializeField] private AudioSource walkAudioSource;
+    [SerializeField] private AudioClip walkSFX;
+    private Coroutine fadeCoroutine;
+
+    //==================================================
+    // SMOKE
+    //==================================================
     [Header("Run Smoke Effect")]
     [SerializeField] private GameObject runSmokeTexture;
     [SerializeField] private Transform smokeSpawnPoint;
     [SerializeField] private float smokeSpawnCooldown = 0.15f;
     private float lastSmokeTime;
 
+    //==================================================
+    // GRAVITY
+    //==================================================
+    [Header("Gravity")]
+    [SerializeField] private float baseGravity = 2f;
+    [SerializeField] private float maxFallSpeed = 18f;
+    [SerializeField] private float fallSpeedMultiplier = 2f;
+
+    //==================================================
+    // JUMP
+    //==================================================
     [Header("Jump")]
     [SerializeField] private float jumpSpeed = 15f;
-    [SerializeField] private int maxJump = 2;
     int jumpsRemaining;
+    private int maxJump;
 
     [Header("GroundCheck")]
     [SerializeField] private Transform groundCheck;
@@ -42,28 +68,26 @@ public class PlayerMove : MonoBehaviour
     bool isOnPlatform;
     bool grounded;
 
-    [Header("Gravity")]
-    [SerializeField] private float baseGravity = 2f;
-    [SerializeField] private float maxFallSpeed = 18f;
-    [SerializeField] private float fallSpeedMultiplier = 2f;
-
-    [Header("Animations")]
-    [SerializeField] private Animator animator;
-
-    [Header("Camera")]
-    [SerializeField] private SpriteRenderer spriteRenderer;
-
-    [Header("Sound")]
-    [SerializeField] private AudioSource walkAudioSource;
-    [SerializeField] private AudioClip walkSFX;
-    private Coroutine fadeCoroutine;
-
+    //==================================================
+    // DASH
+    //==================================================
     [Header("Dash")]
     [SerializeField] private float dashSpeed = 1f;
     [SerializeField] private float dashDuration = 0.1f;
 
+    private bool canDash = false;
     private bool isDashing = false;
-    private bool canDash;
+
+    //==================================================
+    // POWER-UPS
+    //==================================================
+    [Header("Power-Ups")]
+    [SerializeField] public bool canDoubleJump = false;
+    [SerializeField] public bool hasUnlockedDash = false;
+
+    //==================================================
+    // GENERAL
+    //==================================================
     private float deathCounter;
 
     private void Start()
@@ -83,6 +107,8 @@ public class PlayerMove : MonoBehaviour
 
         playerCollider = GetComponent<Collider2D>();
         walkAudioSource.clip = walkSFX;
+
+        maxJump = canDoubleJump ? 2 : 1;
     }
 
     private void Update()
@@ -93,11 +119,9 @@ public class PlayerMove : MonoBehaviour
 
         bool isRunning = animator.GetCurrentAnimatorStateInfo(0).IsName("player_run") && grounded && Mathf.Abs(horizontal) > 0.1f;
 
-
         if (Input.GetKeyDown(KeyCode.LeftControl) && canDash && !isDashing && Mathf.Abs(horizontal) > 0.01f)
         {
             UseDash();
-            
         }
 
         if (isRunning)
@@ -134,24 +158,25 @@ public class PlayerMove : MonoBehaviour
         animator.SetFloat("verticalVelocity", rb.velocity.y);
     }
 
-    private void Gravity()
+    //==================================================
+    // INPUT HANDLERS
+    //==================================================
+
+    public void Move(InputAction.CallbackContext context)
     {
-        if(rb.velocity.y < 0)
-        {
-            rb.gravityScale = baseGravity * fallSpeedMultiplier;
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -maxFallSpeed));
-        }
-        else
-        {
-            rb.gravityScale = baseGravity;
-        }
+        horizontal = context.ReadValue<Vector2>().x * moveSpeed;
     }
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (jumpsRemaining > 0)
+        if (context.performed)
         {
-            if (context.performed)
+            if (grounded)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+                jumpsRemaining = canDoubleJump ? 1 : 0;
+            }
+            else if (jumpsRemaining > 0)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 jumpsRemaining--;
@@ -164,37 +189,6 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    private bool GroundCheck()
-    {
-        bool OnGround = Physics2D.OverlapBox(groundCheck.position, boxSize, 0f, groundLayer);
-        bool onPlatform = Physics2D.OverlapBox(groundCheck.position, boxSize, 0f, platformLayer);
-
-        isOnPlatform = onPlatform;
-        bool grounded = OnGround || onPlatform;
-
-        if (grounded)
-        {
-            jumpsRemaining = maxJump;
-        }
-
-        if (!grounded && !isDashing)
-        {
-            canDash = true;
-        }
-        return grounded;
-    }
-
-    private void Flip()
-    {
-        isFacingRight = !isFacingRight;
-        spriteRenderer.flipX = !isFacingRight;
-    }
-
-    public void Move(InputAction.CallbackContext context)
-    {
-        horizontal = context.ReadValue<Vector2>().x * moveSpeed;
-    }
-
     public void Drop(InputAction.CallbackContext context)
     {
         if (context.performed && grounded && isOnPlatform)
@@ -202,6 +196,28 @@ public class PlayerMove : MonoBehaviour
             StartCoroutine(TemporarilyIgnorePlatforms(0.20f));
         }
     }
+
+    //==================================================
+    // POWER-UP UNLOCKS
+    //==================================================
+
+    public void UnlockDoubleJump()
+    {
+        canDoubleJump = true;
+        if (grounded)
+        {
+            jumpsRemaining = 1;
+        }
+    }
+
+    public void UnlockDash()
+    {
+        hasUnlockedDash = true;
+    }
+
+    //==================================================
+    // COLLISION
+    //==================================================
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -225,20 +241,53 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(groundCheck.position, boxSize);
+    //==================================================
+    // HELPERS
+    //==================================================
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(smokeSpawnPoint.position, Vector3.one * 0.1f);
+    private void Flip()
+    {
+        isFacingRight = !isFacingRight;
+        spriteRenderer.flipX = !isFacingRight;
+    }
+
+    private void Gravity()
+    {
+        if (rb.velocity.y < 0)
+        {
+            rb.gravityScale = baseGravity * fallSpeedMultiplier;
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -maxFallSpeed));
+        }
+        else
+        {
+            rb.gravityScale = baseGravity;
+        }
+    }
+
+    private bool GroundCheck()
+    {
+        bool OnGround = Physics2D.OverlapBox(groundCheck.position, boxSize, 0f, groundLayer);
+        bool onPlatform = Physics2D.OverlapBox(groundCheck.position, boxSize, 0f, platformLayer);
+
+        isOnPlatform = onPlatform;
+        bool grounded = OnGround || onPlatform;
+
+        if (grounded)
+        {
+            jumpsRemaining = canDoubleJump ? 1 : 0;
+        }
+
+        if (!grounded && !isDashing)
+        {
+            canDash = true;
+        }
+        return grounded;
     }
 
     private void SpawnSmoke()
     {
         if (Time.time - lastSmokeTime > smokeSpawnCooldown)
         {
-
             Vector3 spawnPos = smokeSpawnPoint.position;
 
             if (isFacingRight)
@@ -251,7 +300,6 @@ public class PlayerMove : MonoBehaviour
             }
 
             GameObject smoke = Instantiate(runSmokeTexture, smokeSpawnPoint.position, Quaternion.identity);
-
             Destroy(smoke, 0.25f);
             lastSmokeTime = Time.time;
         }
@@ -272,10 +320,48 @@ public class PlayerMove : MonoBehaviour
         fadeCoroutine = null;
     }
 
+    private IEnumerator TemporarilyIgnorePlatforms(float duration)
+    {
+        ContactFilter2D contactFilter = new ContactFilter2D();
+        contactFilter.layerMask = platformLayer;
+        contactFilter.useLayerMask = true;
+
+        List<Collider2D> results = new List<Collider2D>();
+        Physics2D.OverlapCollider(playerCollider, contactFilter, results);
+
+        foreach (var platform in results)
+        {
+            Physics2D.IgnoreCollision(playerCollider, platform, true);
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        foreach (var platform in results)
+        {
+            Physics2D.IgnoreCollision(playerCollider, platform, false);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(groundCheck.position, boxSize);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(smokeSpawnPoint.position, Vector3.one * 0.1f);
+    }
+
+    //==================================================
+    // DASH LOGIC
+    //==================================================
+
     private void UseDash()
     {
-        float direction = isFacingRight ? 1f : -1f;
-        StartCoroutine(DashCoroutine(direction));
+        if (hasUnlockedDash)
+        {
+            float direction = isFacingRight ? 1f : -1f;
+            StartCoroutine(DashCoroutine(direction));
+        }
     }
 
     private IEnumerator DashCoroutine(float direction)
@@ -297,29 +383,4 @@ public class PlayerMove : MonoBehaviour
         isDashing = false;
         animator.SetBool("isDashing", false);
     }
-
-    private IEnumerator TemporarilyIgnorePlatforms(float duration)
-    {
-        ContactFilter2D contactFilter = new ContactFilter2D();
-        contactFilter.layerMask = platformLayer;
-        contactFilter.useLayerMask = true;
-
-        List<Collider2D> results = new List<Collider2D>();
-        Physics2D.OverlapCollider(playerCollider, contactFilter, results);
-
-        foreach (var platform in results)
-        {
-            Physics2D.IgnoreCollision(playerCollider, platform, true);
-        }
-
-        yield return new WaitForSeconds(duration);
-
-        foreach(var platform in results)
-        {
-            Physics2D.IgnoreCollision(playerCollider, platform, false);
-        }
-    }
-
 }
-
-

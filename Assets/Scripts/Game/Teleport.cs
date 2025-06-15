@@ -7,26 +7,42 @@ using static Teleport;
 
 public class Teleport : MonoBehaviour
 {
-
+    //==================================================
+    // ENUMS
+    //==================================================
     public enum TeleportType { ForestIntro, Forest, TutoJump, TutoPlatform, TutoLevel, Lobby, City, CastleIntro, Castle }
 
-
+    //==================================================
+    // REFERENCES
+    //==================================================
     [Header("Player")]
     [SerializeField] private GameObject Player;
 
     [Header("Camera")]
     [SerializeField] private CameraFollowPlayer cameraFollow;
 
+    //==================================================
+    // TELEPORT STATE OBJECTS
+    //==================================================
     [Header("TP States")]
     [SerializeField] private GameObject TP_Inactive_Forest;
     [SerializeField] private GameObject TP_Active_Forest;
 
+    //==================================================
+    // TELEPORT TYPE
+    //==================================================
     [Header("Teleporters")]
     [SerializeField] private TeleportType TP_Type;
-    
+
+    //==================================================
+    // STATE VARIABLES
+    //==================================================
     private bool isPortalActive = false;
     public static Teleport currentTeleport;
 
+    //==================================================
+    // UNITY EVENTS
+    //==================================================
     private void Start()
     {
         TP_Active_Forest.SetActive(false);
@@ -34,7 +50,6 @@ public class Teleport : MonoBehaviour
 
     private void Update()
     {
-
         cameraFollow.cameraOffset = new Vector3(0, 2f, -10f);
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -54,61 +69,55 @@ public class Teleport : MonoBehaviour
             switch (TP_Type)
             {
                 case TeleportType.Forest:
-                    {
-                        TeleportToForestLevel();
-                        break;
-                    }
+                    TeleportToForestLevel();
+                    break;
+
                 case TeleportType.ForestIntro:
                     if (TP_Active_Forest.activeSelf)
                     {
                         TeleportToForestIntro();
                     }
                     break;
-                case TeleportType.TutoJump:
-                    {
-                        TeleportToTutoJump();
-                        break;
-                    }
-                case TeleportType.TutoPlatform:
-                    {
-                        TeleportToTutoPlatform();
-                        break;
-                    }
-                case TeleportType.TutoLevel:
-                    {
-                        TeleportToTutoLevel();
-                        break;
-                    }
-                case TeleportType.Lobby:
-                    {
-                        TeleportTutoToLobby();
-                        break;
-                    }
-                case TeleportType.City:
-                    {
-                        TeleportToCityLevel();
-                        break;
-                    }
-                case TeleportType.CastleIntro:
-                    {
-                        TeleportToCastleIntro();
-                        break;
-                    }
-                case TeleportType.Castle:
-                    {
-                        TeleportToCastleLevel();
-                        break;
-                    }
 
+                case TeleportType.TutoJump:
+                    TeleportToTutoJump();
+                    break;
+
+                case TeleportType.TutoPlatform:
+                    TeleportToTutoPlatform();
+                    break;
+
+                case TeleportType.TutoLevel:
+                    TeleportToTutoLevel();
+                    break;
+
+                case TeleportType.Lobby:
+                    TeleportTutoToLobby();
+                    break;
+
+                case TeleportType.City:
+                    TeleportToCityLevel();
+                    break;
+
+                case TeleportType.CastleIntro:
+                    TeleportToCastleIntro();
+                    break;
+
+                case TeleportType.Castle:
+                    TeleportToCastleLevel();
+                    break;
             }
         }
 
-        if(gameObject.CompareTag("NPC_Knight") && Input.GetKeyDown(KeyCode.E))
+        if (gameObject.CompareTag("NPC_Knight") && Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("Talking to knight");
         }
     }
 
+    //==================================================
+    // PORTAL ACTIVATION
+    //==================================================
     private void SetPortalActive(bool active)
     {
         isPortalActive = active;
@@ -116,10 +125,12 @@ public class Teleport : MonoBehaviour
         TP_Inactive_Forest.SetActive(!isPortalActive);
     }
 
+    //==================================================
+    // COLLISION HANDLERS
+    //==================================================
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player")) return;
-
 
         Debug.Log(gameObject.name + " | TP_Type: " + TP_Type);
         currentTeleport = this;
@@ -130,13 +141,16 @@ public class Teleport : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
-        if(currentTeleport == this)
+        if (currentTeleport == this)
         {
             currentTeleport = null;
         }
         InteractionPrompt.Instance.HidePrompt();
     }
 
+    //==================================================
+    // TELEPORT DESTINATIONS
+    //==================================================
     private void TeleportToForestIntro()
     {
         Player.transform.position = new Vector2(-67f, -12.3f);
@@ -184,6 +198,9 @@ public class Teleport : MonoBehaviour
         SceneManager.LoadScene("CityLevel");
     }
 
+    //==================================================
+    // EXTERNAL CALLS
+    //==================================================
     public void SpawnLobby()
     {
         if (GameManager.Instance != null)

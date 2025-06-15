@@ -5,21 +5,24 @@ using UnityEngine.UI;
 
 public class ShowHideSettings : MonoBehaviour
 {
-
+    // ----------------------------------------
+    // REFERENCES
+    // ----------------------------------------
     [Header("References")]
     public CanvasGroup mainMenuGroup;
     public CanvasGroup settingsGroup;
     public CanvasGroup creditsGroup;
     public float fadeTime = 0.3f;
 
+    [Header("Volume")]
+    public Slider volumeSlider;
 
-    //
-    // PANEL SETTINGS
-    //
 
+    // ----------------------------------------
+    // UNITY EVENTS
+    // ----------------------------------------
     private void Start()
     {
-
         if (settingsGroup != null)
         {
             settingsGroup.alpha = 1;
@@ -43,6 +46,10 @@ public class ShowHideSettings : MonoBehaviour
         creditsGroup.blocksRaycasts = false;
     }
 
+
+    // ----------------------------------------
+    // PANEL CONTROLS
+    // ----------------------------------------
     public void ShowTutorial()
     {
         settingsGroup.alpha = 1;
@@ -93,12 +100,10 @@ public class ShowHideSettings : MonoBehaviour
         mainMenuGroup.interactable = true;
     }
 
-    //
+
+    // ----------------------------------------
     // VOLUME SETTINGS
-    //
-
-    public Slider volumeSlider;
-
+    // ----------------------------------------
     public void SetVolume()
     {
         AudioListener.volume = volumeSlider.value;
@@ -109,7 +114,6 @@ public class ShowHideSettings : MonoBehaviour
     {
         PlayerPrefs.SetFloat("soundVolume", volumeSlider.value);
     }
-
 
     public void LoadVolume()
     {
