@@ -13,6 +13,9 @@ TagManager:
   - TP_Lobby
   - TP_Forest
   - TP_City
+  - Tuto_Platform
+  - Tuto_Lobby
+  - Tuto_Jump
   layers:
   - Default
   - TransparentFX
@@ -73,4 +76,13 @@ TagManager:
     locked: 0
   - name: FrontPillars
     uniqueID: 212573611
+    locked: 0
+  - name: New Layer 9
+    uniqueID: 3823628703
+    locked: 0
+  - name: New Layer 10
+    uniqueID: 3821879817
+    locked: 0
+  - name: PauseMenu
+    uniqueID: 3821801357
     locked: 0

@@ -48,6 +48,14 @@ public class GameManager : MonoBehaviour
         Debug.Log("Settings disabled at " + Time.time);
     }
 
+    private void Update()
+    {
+        if (SceneManager.GetActiveScene().name != "MainMenu" && Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseGame();
+        }
+    }
+
     void OnDestroy()
     {
         Debug.Log("Settings destroyed at " + Time.time);
@@ -66,5 +74,14 @@ public class GameManager : MonoBehaviour
         nextScene = sceneName;
         nextSpawn = spawnPoint;
         SceneManager.LoadScene(sceneName);
+    }
+
+    //==================================================
+    // PAUSE
+    //==================================================
+
+    public void PauseGame()
+    {
+
     }
 }
