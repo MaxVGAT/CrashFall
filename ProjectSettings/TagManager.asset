@@ -16,6 +16,7 @@ TagManager:
   - Tuto_Platform
   - Tuto_Lobby
   - Tuto_Jump
+  - NPC_Music
   layers:
   - Default
   - TransparentFX
@@ -53,6 +54,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BG Images
+    uniqueID: 3821879817
+    locked: 0
   - name: Background
     uniqueID: 1698697041
     locked: 0
@@ -79,9 +83,6 @@ TagManager:
     locked: 0
   - name: New Layer 9
     uniqueID: 3823628703
-    locked: 0
-  - name: New Layer 10
-    uniqueID: 3821879817
     locked: 0
   - name: PauseMenu
     uniqueID: 3821801357

@@ -276,7 +276,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -547082765
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: -7105675749794256429, guid: 6a166f55bcfbec54da55e661587f0d06, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -372,11 +372,11 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.00033817813, y: 0.0034320354}
+  m_Offset: {x: 0.00033817813, y: -0.0044}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.22, y: 0.33}
+    oldSize: {x: 0.2, y: 0.33}
     newSize: {x: 0.22, y: 0.33}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -399,29 +399,30 @@ MonoBehaviour:
   rb: {fileID: 6853951717426421179}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 128
   platformLayer:
     serializedVersion: 2
     m_Bits: 64
   player: {fileID: 986110388543387013}
   moveSpeed: 3
   playerCollider: {fileID: 7173069260496520235}
+  spriteRenderer: {fileID: 3733278836761427643}
+  animator: {fileID: 8614417130033648276}
+  walkAudioSource: {fileID: 1366003222332933465}
+  walkSFX: {fileID: 8300000, guid: e597f4379d1c4414ca9fd17ed883732c, type: 3}
   runSmokeTexture: {fileID: 5541858687348146027, guid: a0f811e6433c37f469a98ddb6aa0fd68, type: 3}
   smokeSpawnPoint: {fileID: 1369112947254890424}
   smokeSpawnCooldown: 0.1
-  jumpSpeed: 7
-  maxJump: 1
-  groundCheck: {fileID: 8887512994385570968}
-  boxSize: {x: 0.8, y: 0.1}
   baseGravity: 2
   maxFallSpeed: 18
   fallSpeedMultiplier: 2
-  animator: {fileID: 8614417130033648276}
-  spriteRenderer: {fileID: 3733278836761427643}
-  walkAudioSource: {fileID: 1366003222332933465}
-  walkSFX: {fileID: 8300000, guid: e597f4379d1c4414ca9fd17ed883732c, type: 3}
+  jumpSpeed: 7
+  groundCheck: {fileID: 8887512994385570968}
+  boxSize: {x: 0.8, y: 0.1}
   dashSpeed: 25
   dashDuration: 0.15
+  canDoubleJump: 0
+  hasUnlockedDash: 0
 --- !u!114 &882294735682375123
 MonoBehaviour:
   m_ObjectHideFlags: 0

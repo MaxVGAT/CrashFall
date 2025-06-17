@@ -7103,7 +7103,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 929154612}
         m_TargetAssemblyTypeName: ButtonHoverEffect, Assembly-CSharp
-        m_MethodName: MenuToGame
+        m_MethodName: StartGameAtTuto
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

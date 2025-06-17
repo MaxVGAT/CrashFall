@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+
+    PlayerMove Player;
+
     //==================================================
     // SINGLETON
     //==================================================
@@ -19,8 +23,8 @@ public class GameManager : MonoBehaviour
     //==================================================
     // SCENE & SPAWN CONTROL
     //==================================================
-    public static string nextSpawn = "Tuto_Spawn_Point";
     public static string nextScene = "InGame";
+    public static string nextSpawn = "Tuto_Spawn_Point";
 
     //==================================================
     // LIFECYCLE
@@ -34,7 +38,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject); // Avoid duplicates
+            Destroy(gameObject);
         }
     }
 
@@ -83,5 +87,22 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
 
+    }
+
+    //==================================================
+    // DEATH CONTROL
+    //==================================================
+
+    public void RespawnPlayer()
+    {
+        GameObject spawnPoint = GameObject.Find(nextSpawn);
+        if (spawnPoint != null)
+        {
+            Player.transform.position = spawnPoint.transform.position;
+        }
+        else
+        {
+            Debug.LogWarning("Spawn point not found: " + nextSpawn);
+        }
     }
 }

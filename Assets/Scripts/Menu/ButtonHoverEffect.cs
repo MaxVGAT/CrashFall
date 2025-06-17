@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -16,6 +17,7 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public AudioClip closeSound;
 
     private ParticleSystem currentEffect;
+    GameManager Instance;
 
     //==================================================
     // UI HOVER EFFECT
@@ -65,11 +67,16 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     //==================================================
     // SCENE TRANSITION
     //==================================================
-    public void MenuToGame()
+
+    public void StartGameAtTuto()
+    {
+        MenuToGame("InGame", "Tuto_Spawn_Point");
+    }
+    public void MenuToGame(string sceneName, string spawnPoint)
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.StartGame("InGame", "Tuto_Spawn_Point");
+            GameManager.Instance.StartGame(sceneName, spawnPoint);
         }
     }
 }

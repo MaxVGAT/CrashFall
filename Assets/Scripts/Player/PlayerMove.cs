@@ -12,6 +12,8 @@ using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerMove : MonoBehaviour
 {
+    public static PlayerMove Instance { get; private set; }
+
     //==================================================
     // REFERENCES
     //==================================================
@@ -92,18 +94,6 @@ public class PlayerMove : MonoBehaviour
 
     private void Start()
     {
-        if (!string.IsNullOrEmpty(GameManager.nextSpawn))
-        {
-            GameObject spawn = GameObject.Find(GameManager.nextSpawn);
-            if (spawn != null)
-            {
-                transform.position = spawn.transform.position;
-            }
-            else
-            {
-                Debug.LogWarning("Spawn point not found: " + GameManager.nextSpawn);
-            }
-        }
 
         playerCollider = GetComponent<Collider2D>();
         walkAudioSource.clip = walkSFX;
@@ -228,7 +218,24 @@ public class PlayerMove : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Trap"))
         {
-            player.transform.position = new Vector2(3f, -3.3f);
+            string currentScene = SceneManager.GetActiveScene().name;
+
+            switch(currentScene)
+            {
+                case "CityLevel":
+                    player.position = new Vector3(1f, 1f, 0);
+                    break;
+                //case "ForestLevel":
+                //    spawnPointName = "Forest_Spawn";
+                //    break;
+                //case "CastleLevel":
+                //    spawnPointName = "Castle_Spawn";
+                //    break;
+                //default:
+                //    spawnPointName = "Tuto_Spawn_Point";
+                //    break;
+            }
+
             deathCounter++;
         }
     }

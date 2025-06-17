@@ -151,6 +151,17 @@ public class Teleport : MonoBehaviour
     //==================================================
     // TELEPORT DESTINATIONS
     //==================================================
+
+    private void TeleportToCityIntro()
+    {
+        Player.transform.position = new Vector3(40f, 40f);
+    }
+
+    private void TeleportToCityLevel()
+    {
+        GameManager.Instance.StartGame("CityLevel", "City_Spawn");
+    }
+
     private void TeleportToForestIntro()
     {
         Player.transform.position = new Vector2(-67f, -12.3f);
@@ -159,6 +170,7 @@ public class Teleport : MonoBehaviour
     private void TeleportToForestLevel()
     {
         SceneManager.LoadScene("ForestLevel");
+        GameManager.Instance.StartGame("ForestLevel", "Forest_Spawn");
     }
 
     private void TeleportToCastleIntro()
@@ -169,6 +181,7 @@ public class Teleport : MonoBehaviour
     private void TeleportToCastleLevel()
     {
         SceneManager.LoadScene("CastleLevel");
+        GameManager.Instance.StartGame("CastleLevel", "Castle_Spawn");
     }
 
     private void TeleportToTutoJump()
@@ -191,11 +204,6 @@ public class Teleport : MonoBehaviour
     private void TeleportTutoToLobby()
     {
         Player.transform.position = new Vector2(3f, -3.3f);
-    }
-
-    private void TeleportToCityLevel()
-    {
-        SceneManager.LoadScene("CityLevel");
     }
 
     //==================================================

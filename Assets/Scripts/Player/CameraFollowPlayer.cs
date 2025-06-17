@@ -14,6 +14,6 @@ public class CameraFollowPlayer : MonoBehaviour
     {
         Vector3 targetPosition = target.position + cameraOffset;
 
-        transform.position = Vector3.Lerp(transform.position, targetPosition, cameraSpeed * Time.deltaTime);
+        transform.position = targetPosition;
     }
 }
