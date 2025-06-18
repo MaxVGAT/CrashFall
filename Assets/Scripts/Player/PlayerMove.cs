@@ -92,11 +92,26 @@ public class PlayerMove : MonoBehaviour
     //==================================================
     private float deathCounter;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void Start()
     {
 
         playerCollider = GetComponent<Collider2D>();
         walkAudioSource.clip = walkSFX;
+
+        canDoubleJump = GameManager.Instance.canDoubleJump;
+        hasUnlockedDash = GameManager.Instance.hasUnlockedDash;
 
         maxJump = canDoubleJump ? 2 : 1;
     }
@@ -193,6 +208,8 @@ public class PlayerMove : MonoBehaviour
 
     public void UnlockDoubleJump()
     {
+        GameManager.Instance.canDoubleJump = true;
+
         canDoubleJump = true;
         if (grounded)
         {
@@ -202,6 +219,8 @@ public class PlayerMove : MonoBehaviour
 
     public void UnlockDash()
     {
+        GameManager.Instance.hasUnlockedDash = true;
+
         hasUnlockedDash = true;
     }
 
@@ -218,25 +237,12 @@ public class PlayerMove : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Trap"))
         {
-            string currentScene = SceneManager.GetActiveScene().name;
+            GameManager.Instance.RespawnPlayer();
+        }
 
-            switch(currentScene)
-            {
-                case "CityLevel":
-                    player.position = new Vector3(1f, 1f, 0);
-                    break;
-                //case "ForestLevel":
-                //    spawnPointName = "Forest_Spawn";
-                //    break;
-                //case "CastleLevel":
-                //    spawnPointName = "Castle_Spawn";
-                //    break;
-                //default:
-                //    spawnPointName = "Tuto_Spawn_Point";
-                //    break;
-            }
-
-            deathCounter++;
+        if (collision.gameObject.CompareTag("DeathLine"))
+        {
+            GameManager.Instance.RespawnPlayer();
         }
     }
 

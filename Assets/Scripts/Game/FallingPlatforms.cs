@@ -55,8 +55,8 @@ public class FallingPlatforms : MonoBehaviour
         if(collision.gameObject.CompareTag("Player") && !isCrumbling && !hasCrumbled)
         {
             isCrumbling = true;
-            crumblingTimer = 1f;
             colorLerpProgress = 0f;
+            crumblingTimer = 1f / crumblingSpeed;
         }
     }
 
@@ -67,6 +67,10 @@ public class FallingPlatforms : MonoBehaviour
         blockRenderer.color = originalColor;
         crumblingBlock.GetComponent<SpriteRenderer>().enabled = true;
         crumblingBlock.GetComponent<BoxCollider2D>().enabled = true;
+
+        crumblingTimer = 1f / crumblingSpeed;
+        colorLerpProgress = 0f;
+
         hasCrumbled = false;
     }
 }

@@ -132,7 +132,6 @@ public class Teleport : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
-        Debug.Log(gameObject.name + " | TP_Type: " + TP_Type);
         currentTeleport = this;
         InteractionPrompt.Instance.ShowPrompt();
     }
@@ -203,7 +202,8 @@ public class Teleport : MonoBehaviour
 
     private void TeleportTutoToLobby()
     {
-        Player.transform.position = new Vector2(3f, -3.3f);
+        SceneManager.LoadScene("InGame");
+        GameManager.Instance.StartGame("InGame", "Tuto_Spawn_Point");
     }
 
     //==================================================

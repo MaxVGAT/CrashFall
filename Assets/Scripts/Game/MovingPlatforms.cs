@@ -29,10 +29,10 @@ public class MovingPlatforms : MonoBehaviour
         distanceX = maxX.x - minX.x;
 
         minY = movingBox.position;
-        maxY = minY + new Vector3(0f, 0f, 0f);
+        maxY = minY + new Vector3(0f, 3f, 0f);
         distanceY = maxY.y - minY.y;
     }
-    private void Update()
+    private void FixedUpdate()
     {
         if (isXMoving && !isYMoving)
         {
@@ -54,7 +54,7 @@ public class MovingPlatforms : MonoBehaviour
     private void MoveY()
     {
         isYMoving = true;
-        float newYPos = maxY.y - Mathf.PingPong(Time.time * movingSpeed, 3f);
+        float newYPos = minY.y - Mathf.PingPong(Time.time * movingSpeed, 3f);
         movingBox.position = new Vector3(movingBox.position.x, newYPos, movingBox.position.z);
     }
 

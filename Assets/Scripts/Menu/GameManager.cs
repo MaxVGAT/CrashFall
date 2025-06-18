@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
 
     PlayerMove Player;
+    Checkpoints Checkpoint;
 
     //==================================================
     // SINGLETON
@@ -25,6 +26,26 @@ public class GameManager : MonoBehaviour
     //==================================================
     public static string nextScene = "InGame";
     public static string nextSpawn = "Tuto_Spawn_Point";
+
+    public GameObject LobbySpawn;
+    public GameObject CitySpawn;
+    //public GameObject ForestSpawn;
+    //public GameObject CastleSpawn;
+
+    public GameObject CityCPCheck;
+
+    //==================================================
+    // PLAYER POWER STATE
+    //==================================================
+
+    public bool canDoubleJump = false;
+    public bool hasUnlockedDash = false;
+
+    //==================================================
+    // SCORE AND TIME
+    //==================================================
+
+    [SerializeField] public int deathCounter;
 
     //==================================================
     // LIFECYCLE
@@ -95,14 +116,42 @@ public class GameManager : MonoBehaviour
 
     public void RespawnPlayer()
     {
-        GameObject spawnPoint = GameObject.Find(nextSpawn);
-        if (spawnPoint != null)
+        deathCounter++;
+
+        string diedInScene = SceneManager.GetActiveScene().name;
+
+        switch(diedInScene)
         {
-            Player.transform.position = spawnPoint.transform.position;
-        }
-        else
-        {
-            Debug.LogWarning("Spawn point not found: " + nextSpawn);
+            case "InGame":
+                Debug.Log("Spawning at " + LobbySpawn.transform.position);
+                PlayerMove.Instance.transform.position = LobbySpawn.transform.position + new Vector3(2.5f, -3f, 0f);
+                break;
+
+            case "CityLevel":
+                if (!Checkpoints.Instance.isCityON)
+                {
+                    PlayerMove.Instance.transform.position = CitySpawn.transform.position;
+                }
+                else
+                {
+                    PlayerMove.Instance.transform.position = CityCPCheck.transform.position;
+                }
+                break;
+            //case "ForestLevel":
+            //    Player.transform.position = ForestSpawn.transform.position;
+            //    break;
+            //case "CastleLevel":
+            //    Player.transform.position = CastleSpawn.transform.position;
+            //    break;
+            default:
+                Debug.LogError("No active scene!");
+                break;
         }
     }
+
+    //==================================================
+    // SCORE CONTROL
+    //==================================================
+
+
 }

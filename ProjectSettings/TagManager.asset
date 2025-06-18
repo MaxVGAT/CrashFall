@@ -17,6 +17,7 @@ TagManager:
   - Tuto_Lobby
   - Tuto_Jump
   - NPC_Music
+  - DeathLine
   layers:
   - Default
   - TransparentFX

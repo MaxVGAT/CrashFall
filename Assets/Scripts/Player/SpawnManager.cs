@@ -1,24 +1,24 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
+//using UnityEngine;
+//using UnityEngine.SceneManagement;
 
-public class SpawnManager : MonoBehaviour
-{
-    void Start()
-    {
-        if (GameManager.Instance != null)
-        {
-            string spawnName = GameManager.nextSpawn;
-            GameObject spawnPoint = GameObject.Find(spawnName);
+//public class SpawnManager : MonoBehaviour
+//{
+//    void Start()
+//    {
+//        if (GameManager.Instance != null)
+//        {
+//            string spawnName = GameManager.nextSpawn;
+//            GameObject spawnPoint = GameObject.Find(spawnName);
 
-            if (spawnPoint != null)
-            {
-                transform.position = spawnPoint.transform.position;
-                transform.rotation = spawnPoint.transform.rotation;
-            }
-            else
-            {
-                Debug.LogWarning($"Spawn point '{spawnName}' not found!");
-            }
-        }
-    }
-}
+//            if (spawnPoint != null)
+//            {
+//                transform.position = spawnPoint.transform.position;
+//                transform.rotation = spawnPoint.transform.rotation;
+//            }
+//            else
+//            {
+//                Debug.LogWarning($"Spawn point '{spawnName}' not found!");
+//            }
+//        }
+//    }
+//}
