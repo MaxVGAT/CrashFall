@@ -45,7 +45,8 @@ using UnityEngine.EventSystems;
                 switch(interactionType)
                 {
                     case InteractionType.OneSentence:
-                        dialogueComponent.text = dialogueLine;
+                    SoundManager.Instance.PlayNPCSFX();
+                    dialogueComponent.text = dialogueLine;
                         oneSentencePanel.SetActive(true);
                         break;
                 }
@@ -64,6 +65,7 @@ using UnityEngine.EventSystems;
 
             isPlayerNearNPC = true;
             InteractionPrompt.Instance.ShowPrompt();
+        
         }
 
         private void OnTriggerExit2D(Collider2D collision)

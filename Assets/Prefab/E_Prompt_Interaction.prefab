@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3730038285630502930
 Transform:
   m_ObjectHideFlags: 0
@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 6754484075017201226}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.493358, y: 18.128529, z: 0.028555697}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 95.68, y: 1.1598291, z: 0}
+  m_LocalScale: {x: 1.4890814, y: 1.4890814, z: 1.4890814}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 212573611
-  m_SortingLayer: 8
+  m_SortingLayer: 9
   m_SortingOrder: 0
   m_Sprite: {fileID: -173530099807541425, guid: d0c798b3d40cd264e873d1a6a0f98c0c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34da493f43dff6c4da2911551ac7803b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 986110388543387013, guid: a1d75f0060c99d1408fad341d67f26ec, type: 3}
   prompt: {fileID: 6754484075017201226}
   promptOffset: {x: 0, y: 1.5, z: 0}
   pulseSpeed: 2

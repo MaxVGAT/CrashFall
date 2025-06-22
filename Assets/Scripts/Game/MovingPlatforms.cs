@@ -15,6 +15,8 @@ public class MovingPlatforms : MonoBehaviour
     [SerializeField] private float movingSpeed;
     [SerializeField] private bool isXMoving = false;
     [SerializeField] private bool isYMoving = false;
+    [SerializeField] private float pingPongLengthX = 0f;
+    [SerializeField] private float pingPongLengthY = 0f;
 
     private float distanceX;
     private float distanceY;
@@ -47,14 +49,14 @@ public class MovingPlatforms : MonoBehaviour
     private void MoveX()
     {
         isXMoving = true;
-        float newXPos = Mathf.PingPong(Time.time * movingSpeed, 5f) + minX.x;
+        float newXPos = Mathf.PingPong(Time.time * movingSpeed, pingPongLengthX) + minX.x;
         movingBox.position = new Vector3(newXPos, movingBox.position.y, movingBox.position.z);
     }
 
     private void MoveY()
     {
         isYMoving = true;
-        float newYPos = minY.y - Mathf.PingPong(Time.time * movingSpeed, 3f);
+        float newYPos = minY.y - Mathf.PingPong(Time.time * movingSpeed, pingPongLengthY);
         movingBox.position = new Vector3(movingBox.position.x, newYPos, movingBox.position.z);
     }
 

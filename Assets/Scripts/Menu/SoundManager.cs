@@ -3,37 +3,46 @@ using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
-    //==============================
-    //          SINGLETON
-    //==============================
     public static SoundManager Instance { get; private set; }
 
-    //==============================
-    //        AUDIO SOURCES
-    //==============================
     [Header("Audio Sources")]
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioSource musicSource;
 
-    //==============================
-    //         AUDIO CLIPS
-    //==============================
-    [Header("Audio Clips")]
-    [SerializeField] private AudioClip lobbyMusic;
+    [Header("Musics")]
     [SerializeField] private AudioClip titleMusic;
+    [SerializeField] private AudioClip lobbyMusic;
+    [SerializeField] private AudioClip cityMusic;
+    [SerializeField] private AudioClip forestMusic;
+    [SerializeField] private AudioClip castleMusic;
 
-    //==============================
-    //        SOUND SETTINGS
-    //==============================
+    [Header("Sound Effects")]
+    [SerializeField] private AudioClip checkpointSound;
+    [SerializeField] private AudioClip npcSound;
+    [SerializeField] private AudioClip teleportSound;
+    [SerializeField] private AudioClip doorOpenSound;
+    [SerializeField] private AudioClip doorCloseSound;
+    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip dashSound;
+    [SerializeField] private AudioClip itemSound;
+    [SerializeField] private AudioClip pauseSound;
+
     [Header("Sound Settings")]
     [SerializeField, Range(0f, 1f)] private float sfxVolume = 0.3f;
     [SerializeField, Range(0f, 1f)] private float musicVolume = 0.1f;
 
-    //==============================
-    //         UNITY EVENTS
-    //==============================
     private void Awake()
     {
+        foreach (Transform child in transform)
+        {
+            if (child.GetComponent<Canvas>() != null)
+            {
+                Debug.LogWarning($"[SoundManager] Detaching unexpected Canvas child '{child.name}'");
+                child.SetParent(null);
+            }
+
+        }
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -47,6 +56,26 @@ public class SoundManager : MonoBehaviour
         sfxVolume = PlayerPrefs.GetFloat("SFXVolume", sfxVolume);
 
         ApplyVolumes();
+
+    }
+
+    private void OnTransformChildrenChanged()
+    {
+        if (transform.childCount > 0)
+        {
+            Debug.LogError($"SoundManager gained unexpected children:");
+            foreach (Transform child in transform)
+            {
+                Debug.LogError($"- {child.name} (from scene: {child.gameObject.scene.name})");
+
+                // Detach any Canvas that gets parented to us
+                if (child.GetComponent<Canvas>() != null)
+                {
+                    Debug.LogWarning($"[SoundManager] Emergency detaching Canvas child '{child.name}'");
+                    child.SetParent(null);
+                }
+            }
+        }
     }
 
     private void Start()
@@ -64,9 +93,6 @@ public class SoundManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    //==============================
-    //       SCENE HANDLING
-    //==============================
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         switch (scene.name)
@@ -77,12 +103,18 @@ public class SoundManager : MonoBehaviour
             case "MainMenu":
                 PlayMusic(titleMusic);
                 break;
+            case "CityLevel":
+                PlayMusic(cityMusic);
+                break;
+            case "ForestLevel":
+                PlayMusic(forestMusic);
+                break;
+            case "CastleLevel":
+                PlayMusic(castleMusic);
+                break;
         }
     }
 
-    //==============================
-    //        AUDIO PLAYBACK
-    //==============================
     public void PlaySFX(AudioClip clip)
     {
         if (clip == null) return;
@@ -104,9 +136,28 @@ public class SoundManager : MonoBehaviour
         musicSource.Stop();
     }
 
-    //==============================
-    //        VOLUME CONTROLS
-    //==============================
+    private void OnDestroy()
+    {
+        Debug.Log($"SoundManager being destroyed. Children count: {transform.childCount}");
+        foreach (Transform child in transform)
+        {
+            Debug.Log($"- Destroying child: {child.name}");
+        }
+    }
+
+
+    public void PlayCheckpointSFX() => PlaySFX(checkpointSound);
+    public void PlayNPCSFX() => PlaySFX(npcSound);
+    public void PlayTeleportSFX() => PlaySFX(teleportSound);
+    public void PlayDoorOpenSFX() => PlaySFX(doorOpenSound);
+    public void PlayDoorCloseSFX() => PlaySFX(doorCloseSound);
+    public void PlayDeathSFX() => PlaySFX(deathSound);
+    public void PlayJumpSFX() => PlaySFX(jumpSound);
+    public void PlayDashSFX() => PlaySFX(dashSound);
+    public void PickUpSFX() => PlaySFX(itemSound);
+
+    public void PauseSFX() => PlaySFX(pauseSound);
+
     public void SetMusicVolume(float volume)
     {
         musicVolume = Mathf.Clamp01(volume);
@@ -121,9 +172,6 @@ public class SoundManager : MonoBehaviour
         PlayerPrefs.SetFloat("SFXVolume", sfxVolume);
     }
 
-    //==============================
-    //      INTERNAL HELPERS
-    //==============================
     private void ApplyVolumes()
     {
         musicSource.volume = musicVolume;

@@ -24,6 +24,7 @@ public class UnlockDoor : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
+        SoundManager.Instance.PlayDoorOpenSFX();
         animator.SetBool("isPlayerNear", true);
         InteractionPrompt.Instance.ShowPrompt();
     }
@@ -32,6 +33,7 @@ public class UnlockDoor : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
+        SoundManager.Instance.PlayDoorCloseSFX();
         animator.SetBool("isPlayerNear", false);
         InteractionPrompt.Instance.HidePrompt();
     }

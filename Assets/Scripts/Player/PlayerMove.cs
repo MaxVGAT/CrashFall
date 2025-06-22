@@ -118,6 +118,9 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance != null && GameManager.Instance.isPaused)
+            return;
+
         rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
         grounded = GroundCheck();
         Gravity();
@@ -174,21 +177,24 @@ public class PlayerMove : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && GameManager.Instance.isPaused == false)
         {
             if (grounded)
             {
+                SoundManager.Instance.PlayJumpSFX();
                 rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 jumpsRemaining = canDoubleJump ? 1 : 0;
             }
             else if (jumpsRemaining > 0)
             {
+                SoundManager.Instance.PlayJumpSFX();
                 rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 jumpsRemaining--;
             }
 
             if (context.canceled && rb.velocity.y > 0f)
             {
+                SoundManager.Instance.PlayJumpSFX();
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             }
         }
@@ -372,6 +378,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (hasUnlockedDash)
         {
+            SoundManager.Instance.PlayDashSFX();
             float direction = isFacingRight ? 1f : -1f;
             StartCoroutine(DashCoroutine(direction));
         }

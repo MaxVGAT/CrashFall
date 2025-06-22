@@ -72,6 +72,7 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         MenuToGame("InGame", "Tuto_Spawn_Point");
     }
+
     public void MenuToGame(string sceneName, string spawnPoint)
     {
         if (GameManager.Instance != null)

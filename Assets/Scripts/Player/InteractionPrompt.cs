@@ -15,7 +15,7 @@ public class InteractionPrompt : MonoBehaviour
     [SerializeField] private GameObject prompt;
     [SerializeField] private Vector3 promptOffset = new Vector3(0, 1.5f, 0);
     [SerializeField] private float pulseSpeed = 2f;
-    [SerializeField] private float maxPulseSize = 3f;
+    [SerializeField] private float maxPulseSize = 1.2f;
     [SerializeField] private float minPulseSize = 1f;
 
 
@@ -55,9 +55,12 @@ public class InteractionPrompt : MonoBehaviour
         prompt.transform.position = player.position + promptOffset;
         prompt.transform.forward = mainCamera.transform.forward;
 
+        //Debug.Log($"GameObject: {gameObject.name} - minPulseSize: {minPulseSize}, maxPulseSize: {maxPulseSize}");
+
         float normalizedSin = (Mathf.Sin(Time.time * pulseSpeed) + 1f) / 2f;
         float scale = Mathf.Lerp(minPulseSize, maxPulseSize, normalizedSin);
-        prompt.transform.localScale = baseScale * scale;
+
+        prompt.transform.localScale = Vector3.one * scale;
     }
 
     private void OnDestroy()
@@ -72,6 +75,7 @@ public class InteractionPrompt : MonoBehaviour
     // ----------------------------------------
     // PUBLIC METHODS
     // ----------------------------------------
+
     public void ShowPrompt()
     {
         if (prompt != null && !prompt.activeSelf)

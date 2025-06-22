@@ -29,10 +29,12 @@ public class ItemPickup : MonoBehaviour
                 case PickupType.DoubleJump:
                     Player.UnlockDoubleJump();
                     gameObject.SetActive(false);
+                    SoundManager.Instance.PickUpSFX();
                     break;
                 case PickupType.Dash:
                     Player.UnlockDash();
                     gameObject.SetActive(false);
+                    SoundManager.Instance.PickUpSFX();
                     break;
             }
         }

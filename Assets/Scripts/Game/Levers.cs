@@ -57,7 +57,6 @@ public class Levers : MonoBehaviour
         rightGateCollider = Right_Gate.GetComponent<Collider2D>();
 
         CloseFence();
-        Debug.Log(isLeverActive);
     }
 
     private void Update()

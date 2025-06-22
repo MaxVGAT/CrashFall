@@ -1,84 +1,54 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Checkpoints : MonoBehaviour
 {
-    public static Checkpoints Instance { get; private set; }
+    public enum CheckpointType { City, Forest /*, Castle if needed */ }
 
-    public enum CheckpointType { City_CP, Forest_CP, Castle_CP }
+    [Header("Checkpoint Settings")]
+    [SerializeField] private CheckpointType checkpointType;
 
-    [Header("Checkpoints")]
-    [SerializeField] private CheckpointType CPType;
-    [SerializeField] private GameObject City_CP;
-    //[SerializeField] private GameObject Forest_CP;
-    //[SerializeField] private GameObject Castle_CP;
+    [Header("Visuals")]
+    [SerializeField] private GameObject texture_OFF;
+    [SerializeField] private GameObject texture_ON;
 
-    [Header("Textures")]
-    [SerializeField] private GameObject City_OFF;
-    [SerializeField] private GameObject City_ON;
-    //[SerializeField] private GameObject Forest_OFF;
-    //[SerializeField] private GameObject Forest_ON;
-    //[SerializeField] private GameObject Castle_OFF;
-    //[SerializeField] private GameObject Castle_ON;
+    private bool isActivated = false;
 
-    [Header("Conditions")]
-    [SerializeField] public bool isCityON = false;
-    //[SerializeField] private bool isForestON = false;
-    //[SerializeField] private bool isCastleON = false;
-
-    private void Awake()
+    private void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        City_ON.SetActive(false);
-        City_OFF.SetActive(true);
+        // Start with OFF active, ON inactive
+        texture_OFF.SetActive(true);
+        texture_ON.SetActive(false);
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (isActivated) return; // Already activated
+
         if (!collision.CompareTag("Player")) return;
 
-        string currentCP = CPType.ToString();
+        isActivated = true;
 
-        switch(currentCP)
+        // Swap textures
+        texture_OFF.SetActive(false);
+        texture_ON.SetActive(true);
+
+        // Play sound
+        SoundManager.Instance.PlayCheckpointSFX();
+
+        // Tell GameManager to activate checkpoint flag
+        switch (checkpointType)
         {
-            case "City_CP": 
-                if (!isCityON)
-                {
-                    isCityON = true;
-                    City_OFF.SetActive(false);
-                    City_ON.SetActive(true);
-                }
+            case CheckpointType.City:
+                GameManager.Instance.ActivateCityCheckpoint();
                 break;
 
-            //case "Forest_CP":
-            //    if (!isForestON)
-            //    {
-            //        isForestON = true;
-            //        Forest_OFF.SetActive(false);
-            //        Forest_ON.SetActive(true);
-            //    }
-            //    break;
+            case CheckpointType.Forest:
+                GameManager.Instance.ActivateForestCheckpoint();
+                break;
 
-            //case "Castle_CP":
-            //    if (!isCastleON)
-            //    {
-            //        isCastleON = true;
-            //        Castle_OFF.SetActive(false);
-            //        Castle_ON.SetActive(true);
-            //    }
-            //    break;
+                // Add Castle or others if needed here
         }
-    }
 
+        Debug.Log($"[Checkpoint] Activated {checkpointType} checkpoint.");
+    }
 }
