@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static Teleport;
 
 public class Teleport : MonoBehaviour
 {
@@ -57,21 +55,23 @@ public class Teleport : MonoBehaviour
 
     private void Update()
     {
+        // Adjust camera offset every frame — might be better elsewhere, but unchanged per your request
         cameraFollow.cameraOffset = new Vector3(0, 2f, -10f);
 
-        if (GameManager.Instance.canDoubleJump)
+        if (GameManager.Instance != null)
         {
-            SetForestPortalActive(true);
+            if (GameManager.Instance.canDoubleJump)
+                SetForestPortalActive(true);
+
+            if (GameManager.Instance.hasUnlockedDash)
+                SetCastlePortalActive(true);
         }
 
-        if (GameManager.Instance.hasUnlockedDash)
+        if (currentTeleport == this && Input.GetKeyDown(KeyCode.E))
         {
-            SetCastlePortalActive(true);
-        }
+            if (SoundManager.Instance != null)
+                SoundManager.Instance.PlayTeleportSFX();
 
-        if (Teleport.currentTeleport == this && Input.GetKeyDown(KeyCode.E))
-        {
-            SoundManager.Instance.PlayTeleportSFX();
             switch (TP_Type)
             {
                 case TeleportType.Forest:
@@ -80,9 +80,7 @@ public class Teleport : MonoBehaviour
 
                 case TeleportType.ForestIntro:
                     if (TP_Active_Forest.activeSelf)
-                    {
                         TeleportToForestIntro();
-                    }
                     break;
 
                 case TeleportType.TutoJump:
@@ -102,7 +100,7 @@ public class Teleport : MonoBehaviour
                     break;
 
                 case TeleportType.LobbyScene:
-                    TeleportToTutoScene();
+                    TeleportToLobbyScene();
                     break;
 
                 case TeleportType.CityIntro:
@@ -144,12 +142,12 @@ public class Teleport : MonoBehaviour
     //==================================================
     // COLLISION HANDLERS
     //==================================================
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player")) return;
 
         currentTeleport = this;
-        InteractionPrompt.Instance.ShowPrompt();
+        InteractionPrompt.Instance?.ShowPrompt();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -157,16 +155,14 @@ public class Teleport : MonoBehaviour
         if (!collision.CompareTag("Player")) return;
 
         if (currentTeleport == this)
-        {
             currentTeleport = null;
-        }
-        InteractionPrompt.Instance.HidePrompt();
+
+        InteractionPrompt.Instance?.HidePrompt();
     }
 
     //==================================================
     // TELEPORT DESTINATIONS
     //==================================================
-
     private void TeleportToCityIntro()
     {
         Player.transform.position = new Vector3(46f, -3.3f);
@@ -175,11 +171,9 @@ public class Teleport : MonoBehaviour
     private void TeleportToCityLevel()
     {
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.isForestCheckpointActive = false;
-        }
 
-        GameManager.Instance.StartGame("CityLevel", "City_Spawn");
+        GameManager.Instance?.StartGame("CityLevel", "City_Spawn");
     }
 
     private void TeleportToForestIntro()
@@ -189,14 +183,13 @@ public class Teleport : MonoBehaviour
 
     private void TeleportToForestLevel()
     {
-        // Reset checkpoints directly via GameManager, no Checkpoints singleton
         if (GameManager.Instance != null)
         {
             GameManager.Instance.isCityCheckpointActive = false;
             GameManager.Instance.isForestCheckpointActive = false;
         }
 
-        GameManager.Instance.StartGame("ForestLevel", "Forest_Spawn");
+        GameManager.Instance?.StartGame("ForestLevel", "Forest_Spawn");
     }
 
     private void TeleportToCastleIntro()
@@ -216,9 +209,7 @@ public class Teleport : MonoBehaviour
 
     private void TeleportToTutoPlatform()
     {
-        Vector2 newPos = new Vector2(21.7f, 18f);
-        //Debug.Log($"ENTERED Teleporter | Type: {TP_Type} | Object: {gameObject.name}");
-        Player.transform.position = newPos;
+        Player.transform.position = new Vector2(21.7f, 18f);
     }
 
     private void TeleportToTutoLevel()
@@ -228,32 +219,21 @@ public class Teleport : MonoBehaviour
 
     private void TeleportTutoToLobby()
     {
-        Player.transform.position = GameManager.Instance.LobbySpawn.transform.position + new Vector3(2.5f, -3f, 0f);
+        if (GameManager.Instance?.LobbySpawn != null)
+        {
+            Player.transform.position = GameManager.Instance.LobbySpawn.transform.position + new Vector3(2.5f, -3f, 0f);
+        }
     }
 
-    private void TeleportToTutoScene()
+    private void TeleportToLobbyScene()
     {
         Debug.Log("TeleportToTutoScene() called - should spawn at: Lobby_Spawn");
+
         if (GameManager.Instance != null)
         {
             GameManager.Instance.isCityCheckpointActive = false;
             GameManager.Instance.isForestCheckpointActive = false;
+            GameManager.Instance.StartGame("InGame", "LobbySpawn");
         }
-
-        GameManager.Instance.StartGame("InGame", "LobbySpawn");
-        Player.transform.position = new Vector2(-1.8f, -0.2f);
-
     }
-
-    //==================================================
-    // EXTERNAL CALLS
-    //==================================================
-    //public void SpawnLobby()
-    //{
-    //    Debug.Log("SpawnLobby() called");
-    //    if (GameManager.Instance != null)
-    //    {
-    //        GameManager.Instance.StartGame("InGame", "Tuto_Spawn_Point");
-    //    }
-    //}
 }

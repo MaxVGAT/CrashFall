@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -8,25 +6,23 @@ using UnityEditor.Tilemaps;
 
 public class Levers : MonoBehaviour
 {
-    // ----------------------------------------
-    // LEVER STATE
-    // ----------------------------------------
+    // ============================
+    // ====== LEVER STATE =========
+    // ============================
     [Header("Lever State")]
     [SerializeField] private GameObject Inactive_Lever;
     [SerializeField] private GameObject Active_Lever;
 
-
-    // ----------------------------------------
-    // FENCE ELEMENTS
-    // ----------------------------------------
+    // ============================
+    // ======= FENCE ELEMENTS =====
+    // ============================
     [Header("Fence")]
     [SerializeField] private Transform Left_Gate;
     [SerializeField] private Transform Right_Gate;
 
-
-    // ----------------------------------------
-    // FENCE STATE
-    // ----------------------------------------
+    // ============================
+    // ======= FENCE STATE ========
+    // ============================
     [Header("Fence State")]
     [SerializeField] private Vector3 leftClosedLocalPos;
     [SerializeField] private Vector3 rightClosedLocalPos;
@@ -36,35 +32,49 @@ public class Levers : MonoBehaviour
     [SerializeField] private Collider2D leftGateCollider;
     [SerializeField] private Collider2D rightGateCollider;
 
-
-    // ----------------------------------------
-    // INTERNAL STATE
-    // ----------------------------------------
+    // ============================
+    // ===== INTERNAL STATE =======
+    // ============================
     private bool isPlayerInside = false;
     private bool isLeverActive = false;
 
-
-    // ----------------------------------------
-    // UNITY EVENTS
-    // ----------------------------------------
+    // ============================
+    // ====== UNITY EVENTS ========
+    // ============================
     private void Start()
     {
-        Active_Lever.SetActive(false);
+        if (Active_Lever != null) Active_Lever.SetActive(false);
+        if (Inactive_Lever != null) Inactive_Lever.SetActive(true);
 
-        leftClosedLocalPos = Left_Gate.localPosition;
-        rightClosedLocalPos = Right_Gate.localPosition;
-        leftGateCollider = Left_Gate.GetComponent<Collider2D>();
-        rightGateCollider = Right_Gate.GetComponent<Collider2D>();
+        if (Left_Gate != null)
+        {
+            leftClosedLocalPos = Left_Gate.localPosition;
+            leftGateCollider = Left_Gate.GetComponent<Collider2D>();
+        }
+        else
+        {
+            Debug.LogWarning("[Levers] Left_Gate is not assigned!");
+        }
+
+        if (Right_Gate != null)
+        {
+            rightClosedLocalPos = Right_Gate.localPosition;
+            rightGateCollider = Right_Gate.GetComponent<Collider2D>();
+        }
+        else
+        {
+            Debug.LogWarning("[Levers] Right_Gate is not assigned!");
+        }
 
         CloseFence();
     }
 
     private void Update()
     {
-        if (isPlayerInside && Input.GetKeyDown(KeyCode.F))
+        if (isPlayerInside && Input.GetKeyDown(KeyCode.E))
         {
             ToggleLeverAndFence();
-            Debug.Log("Lever is :" + isLeverActive);
+            Debug.Log("[Levers] Lever is: " + isLeverActive);
         }
     }
 
@@ -73,7 +83,7 @@ public class Levers : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             isPlayerInside = true;
-            Debug.Log(isPlayerInside);
+            Debug.Log("[Levers] Player entered trigger.");
             //tpConfirmationPanel.SetActive(true);
         }
     }
@@ -83,20 +93,19 @@ public class Levers : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             isPlayerInside = false;
-            Debug.Log(isPlayerInside);
+            Debug.Log("[Levers] Player exited trigger.");
             //tpConfirmationPanel.SetActive(false);
         }
     }
 
-
-    // ----------------------------------------
-    // LEVER & FENCE CONTROL
-    // ----------------------------------------
+    // ============================
+    // ===== LEVER & FENCE CTRL ===
+    // ============================
     public void SetLeverActive(bool active)
     {
         isLeverActive = active;
-        Active_Lever.SetActive(isLeverActive);
-        Inactive_Lever.SetActive(!isLeverActive);
+        if (Active_Lever != null) Active_Lever.SetActive(isLeverActive);
+        if (Inactive_Lever != null) Inactive_Lever.SetActive(!isLeverActive);
     }
 
     private void ToggleLeverAndFence()
@@ -105,41 +114,52 @@ public class Levers : MonoBehaviour
 
         if (isLeverActive)
         {
-            Active_Lever.SetActive(true);
-            Inactive_Lever.SetActive(false);
+            if (Active_Lever != null) Active_Lever.SetActive(true);
+            if (Inactive_Lever != null) Inactive_Lever.SetActive(false);
             OpenFence();
         }
         else
         {
-            Active_Lever.SetActive(false);
-            Inactive_Lever.SetActive(true);
+            if (Active_Lever != null) Active_Lever.SetActive(false);
+            if (Inactive_Lever != null) Inactive_Lever.SetActive(true);
             CloseFence();
         }
     }
 
-
-    // ----------------------------------------
-    // GATE ANIMATION
-    // ----------------------------------------
+    // ============================
+    // ======= GATE ANIMATION =====
+    // ============================
     private void OpenFence()
     {
-        Left_Gate.localPosition = leftOpenedLocalPos;
-        Right_Gate.localPosition = rightOpenedLocalPos;
-        Left_Gate.localRotation = Quaternion.Euler(0, 0, -90);
-        Right_Gate.localRotation = Quaternion.Euler(0, 0, 90);
+        if (Left_Gate != null)
+        {
+            Left_Gate.localPosition = leftOpenedLocalPos;
+            Left_Gate.localRotation = Quaternion.Euler(0, 0, -90);
+            if (leftGateCollider != null) leftGateCollider.enabled = false;
+        }
 
-        leftGateCollider.enabled = false;
-        rightGateCollider.enabled = false;
+        if (Right_Gate != null)
+        {
+            Right_Gate.localPosition = rightOpenedLocalPos;
+            Right_Gate.localRotation = Quaternion.Euler(0, 0, 90);
+            if (rightGateCollider != null) rightGateCollider.enabled = false;
+        }
     }
 
     private void CloseFence()
     {
-        Left_Gate.localPosition = leftClosedLocalPos;
-        Right_Gate.localPosition = rightClosedLocalPos;
-        Left_Gate.localRotation = Quaternion.Euler(0, 0, 0);
-        Right_Gate.localRotation = Quaternion.Euler(0, 0, 0);
+        if (Left_Gate != null)
+        {
+            Left_Gate.localPosition = leftClosedLocalPos;
+            Left_Gate.localRotation = Quaternion.Euler(0, 0, 0);
+            if (leftGateCollider != null) leftGateCollider.enabled = true;
+        }
 
-        leftGateCollider.enabled = true;
-        rightGateCollider.enabled = true;
+        if (Right_Gate != null)
+        {
+            Right_Gate.localPosition = rightClosedLocalPos;
+            Right_Gate.localRotation = Quaternion.Euler(0, 0, 0);
+            if (rightGateCollider != null) rightGateCollider.enabled = true;
+        }
     }
 }

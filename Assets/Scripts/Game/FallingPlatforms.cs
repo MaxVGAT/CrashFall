@@ -1,58 +1,88 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FallingPlatforms : MonoBehaviour
 {
+    // ============================
+    // ======== SETTINGS ==========
+    // ============================
     [Header("Settings")]
     [SerializeField] private GameObject Player;
     [SerializeField] private GameObject crumblingBlock;
     [SerializeField] private float crumblingSpeed = 1f;
-    [SerializeField] private float crumblingTimer = 0f;
     [SerializeField] private float respawnTimer = 5f;
 
+    // ============================
+    // ======== STATE =============
+    // ============================
     private bool isCrumbling = false;
     private bool hasCrumbled = false;
-    private BoxCollider2D blockCollider;
 
-
+    private float crumblingTimer = 0f;
     private float colorLerpProgress = 0f;
 
     private SpriteRenderer blockRenderer;
-    private Color originalColor;
-    private Color crumblingColor = Color.red;
+    private BoxCollider2D blockCollider;
 
+    private Color originalColor;
+    private readonly Color crumblingColor = Color.red;
+
+    // ============================
+    // ========= START ============
+    // ============================
     private void Start()
     {
+        if (crumblingBlock == null)
+        {
+            Debug.LogError("[FallingPlatforms] crumblingBlock reference missing!");
+            enabled = false;
+            return;
+        }
+
         blockRenderer = crumblingBlock.GetComponent<SpriteRenderer>();
         blockCollider = crumblingBlock.GetComponent<BoxCollider2D>();
-        blockRenderer = crumblingBlock.GetComponent<SpriteRenderer>();
+
+        if (blockRenderer == null || blockCollider == null)
+        {
+            Debug.LogError("[FallingPlatforms] Missing SpriteRenderer or BoxCollider2D on crumblingBlock!");
+            enabled = false;
+            return;
+        }
+
         originalColor = blockRenderer.color;
+        crumblingTimer = 1f / crumblingSpeed;
     }
 
+    // ============================
+    // ========= UPDATE ===========
+    // ============================
     private void Update()
     {
-        if(isCrumbling)
+        if (!isCrumbling) return;
+
+        crumblingTimer -= Time.deltaTime;
+        colorLerpProgress += Time.deltaTime * crumblingSpeed;
+
+        blockRenderer.color = Color.Lerp(originalColor, crumblingColor, colorLerpProgress);
+
+        if (crumblingTimer <= 0f && crumblingBlock.activeSelf)
         {
-            crumblingTimer -= Time.deltaTime;
-            colorLerpProgress += Time.deltaTime * crumblingSpeed;
+            blockRenderer.enabled = false;
+            blockCollider.enabled = false;
 
-            blockRenderer.color = Color.Lerp(originalColor, crumblingColor, colorLerpProgress);
+            hasCrumbled = true;
+            isCrumbling = false;
 
-            if (crumblingTimer <= 0f && crumblingBlock.activeSelf)
-            {
-                crumblingBlock.GetComponent<SpriteRenderer>().enabled = false;
-                crumblingBlock.GetComponent<BoxCollider2D>().enabled = false;
-                hasCrumbled = true;
-                isCrumbling = false;
-                StartCoroutine(ResetBlock());
-            }
+            StartCoroutine(ResetBlock());
         }
     }
 
+    // ============================
+    // ======== COLLISIONS ========
+    // ============================
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("Player") && !isCrumbling && !hasCrumbled)
+        if (collision.gameObject.CompareTag("Player") && !isCrumbling && !hasCrumbled)
         {
             isCrumbling = true;
             colorLerpProgress = 0f;
@@ -60,17 +90,19 @@ public class FallingPlatforms : MonoBehaviour
         }
     }
 
-    IEnumerator ResetBlock()
+    // ============================
+    // ======= COROUTINES =========
+    // ============================
+    private IEnumerator ResetBlock()
     {
         yield return new WaitForSeconds(respawnTimer);
 
         blockRenderer.color = originalColor;
-        crumblingBlock.GetComponent<SpriteRenderer>().enabled = true;
-        crumblingBlock.GetComponent<BoxCollider2D>().enabled = true;
+        blockRenderer.enabled = true;
+        blockCollider.enabled = true;
 
         crumblingTimer = 1f / crumblingSpeed;
         colorLerpProgress = 0f;
-
         hasCrumbled = false;
     }
 }

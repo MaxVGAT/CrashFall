@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class Checkpoints : MonoBehaviour
 {
-    public enum CheckpointType { City, Forest /*, Castle if needed */ }
+    // ============================
+    // ======= ENUM & FIELDS ======
+    // ============================
+    public enum CheckpointType { City, Forest /* TODO: Castle */ }
 
     [Header("Checkpoint Settings")]
     [SerializeField] private CheckpointType checkpointType;
@@ -11,44 +14,61 @@ public class Checkpoints : MonoBehaviour
     [SerializeField] private GameObject texture_OFF;
     [SerializeField] private GameObject texture_ON;
 
-    private bool isActivated = false;
+    private bool isActivated;
 
+    // ============================
+    // ========= START ============
+    // ============================
     private void Start()
     {
-        // Start with OFF active, ON inactive
-        texture_OFF.SetActive(true);
-        texture_ON.SetActive(false);
+        if (texture_OFF != null) texture_OFF.SetActive(true);
+        if (texture_ON != null) texture_ON.SetActive(false);
     }
 
+    // ============================
+    // ======= TRIGGER EVENT ======
+    // ============================
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isActivated) return; // Already activated
-
-        if (!collision.CompareTag("Player")) return;
+        if (isActivated || !collision.CompareTag("Player")) return;
 
         isActivated = true;
 
-        // Swap textures
-        texture_OFF.SetActive(false);
-        texture_ON.SetActive(true);
+        // Visual feedback toggle
+        if (texture_OFF != null) texture_OFF.SetActive(false);
+        if (texture_ON != null) texture_ON.SetActive(true);
 
-        // Play sound
-        SoundManager.Instance.PlayCheckpointSFX();
-
-        // Tell GameManager to activate checkpoint flag
-        switch (checkpointType)
+        // Play checkpoint sound if available
+        if (SoundManager.Instance != null)
         {
-            case CheckpointType.City:
-                GameManager.Instance.ActivateCityCheckpoint();
-                break;
-
-            case CheckpointType.Forest:
-                GameManager.Instance.ActivateForestCheckpoint();
-                break;
-
-                // Add Castle or others if needed here
+            SoundManager.Instance.PlayCheckpointSFX();
+        }
+        else
+        {
+            Debug.LogWarning("[Checkpoint] SoundManager.Instance is null.");
         }
 
-        Debug.Log($"[Checkpoint] Activated {checkpointType} checkpoint.");
+        // Inform GameManager about checkpoint activation
+        if (GameManager.Instance != null)
+        {
+            switch (checkpointType)
+            {
+                case CheckpointType.City:
+                    GameManager.Instance.ActivateCityCheckpoint();
+                    break;
+
+                case CheckpointType.Forest:
+                    GameManager.Instance.ActivateForestCheckpoint();
+                    break;
+
+                    // TODO: Add Castle or others here
+            }
+
+            Debug.Log($"[Checkpoint] Activated {checkpointType} checkpoint.");
+        }
+        else
+        {
+            Debug.LogWarning("[Checkpoint] GameManager.Instance is null!");
+        }
     }
 }

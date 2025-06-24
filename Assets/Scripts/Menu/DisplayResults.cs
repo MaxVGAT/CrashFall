@@ -4,27 +4,62 @@ using UnityEngine;
 
 public class DisplayResults : MonoBehaviour
 {
-    GameManager gameManager;
+    private GameManager gameManager;
 
-    int deaths = GameManager.Instance.deathCounter;
-    string timer = GameManager.Instance.GetFormattedTime();
+    private int deaths;
+    private string timer;
 
     private bool seeResult = false;
 
-    private void Update()
+    //==================================================
+    // UNITY EVENTS
+    //==================================================
+    private void Start()
     {
-        if(seeResult && Input.GetKeyDown(KeyCode.E))
+        // Cache GameManager reference safely
+        gameManager = GameManager.Instance;
+
+        if (gameManager != null)
         {
-            GameManager.Instance.ShowResults(deaths, timer);
+            deaths = gameManager.deathCounter;
+            timer = gameManager.GetFormattedTime();
+        }
+        else
+        {
+            Debug.LogWarning("[DisplayResults] GameManager.Instance is null!");
+            deaths = 0;
+            timer = "00:00";
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    private void Update()
+    {
+        if (seeResult && Input.GetKeyDown(KeyCode.E))
+        {
+            if (gameManager != null)
+            {
+                gameManager.ShowResults(deaths, timer);
+            }
+            else
+            {
+                Debug.LogWarning("[DisplayResults] Cannot show results, GameManager.Instance is null!");
+            }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player")) return;
 
         seeResult = true;
+        InteractionPrompt.Instance.ShowPrompt();
+    }
 
-        GameManager.Instance.ShowResults(deaths, timer);
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (!collision.CompareTag("Player")) return;
+
+        seeResult = false;
+        InteractionPrompt.Instance.HidePrompt();
     }
 }

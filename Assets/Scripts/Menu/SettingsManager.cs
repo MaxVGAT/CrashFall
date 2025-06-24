@@ -12,46 +12,47 @@ public class ShowHideSettings : MonoBehaviour
     public CanvasGroup mainMenuGroup;
     public CanvasGroup settingsGroup;
     public CanvasGroup creditsGroup;
+    public CanvasGroup bugsGroup;
     public float fadeTime = 0.3f;
 
     [Header("Volume")]
     public Slider volumeSlider;
-
 
     // ----------------------------------------
     // UNITY EVENTS
     // ----------------------------------------
     private void Start()
     {
+        // Initialize settings and credits groups to invisible and non-interactable
         if (settingsGroup != null)
         {
-            settingsGroup.alpha = 1;
-            settingsGroup.interactable = true;
-            settingsGroup.blocksRaycasts = true;
+            settingsGroup.alpha = 0;
+            settingsGroup.interactable = false;
+            settingsGroup.blocksRaycasts = false;
         }
 
         if (creditsGroup != null)
         {
-            creditsGroup.alpha = 1;
-            creditsGroup.interactable = true;
-            creditsGroup.blocksRaycasts = true;
+            creditsGroup.alpha = 0;
+            creditsGroup.interactable = false;
+            creditsGroup.blocksRaycasts = false;
         }
 
-        settingsGroup.alpha = 0;
-        settingsGroup.interactable = false;
-        settingsGroup.blocksRaycasts = false;
-
-        creditsGroup.alpha = 0;
-        creditsGroup.interactable = false;
-        creditsGroup.blocksRaycasts = false;
+        if (bugsGroup != null)
+        {
+            bugsGroup.alpha = 0;
+            bugsGroup.interactable = false;
+            bugsGroup.blocksRaycasts = false;
+        }
     }
-
 
     // ----------------------------------------
     // PANEL CONTROLS
     // ----------------------------------------
     public void ShowTutorial()
     {
+        if (settingsGroup == null) return;
+
         settingsGroup.alpha = 1;
         settingsGroup.interactable = true;
         settingsGroup.blocksRaycasts = true;
@@ -59,6 +60,8 @@ public class ShowHideSettings : MonoBehaviour
 
     public void HideTutorial()
     {
+        if (settingsGroup == null) return;
+
         settingsGroup.alpha = 0;
         settingsGroup.interactable = false;
         settingsGroup.blocksRaycasts = false;
@@ -66,6 +69,8 @@ public class ShowHideSettings : MonoBehaviour
 
     public void ShowSettings()
     {
+        if (settingsGroup == null || mainMenuGroup == null) return;
+
         settingsGroup.alpha = 1;
         settingsGroup.interactable = true;
         settingsGroup.blocksRaycasts = true;
@@ -75,6 +80,8 @@ public class ShowHideSettings : MonoBehaviour
 
     public void HideSettings()
     {
+        if (settingsGroup == null || mainMenuGroup == null) return;
+
         settingsGroup.alpha = 0;
         settingsGroup.interactable = false;
         settingsGroup.blocksRaycasts = false;
@@ -84,6 +91,8 @@ public class ShowHideSettings : MonoBehaviour
 
     public void ShowCredits()
     {
+        if (creditsGroup == null || mainMenuGroup == null) return;
+
         creditsGroup.alpha = 1;
         creditsGroup.interactable = true;
         creditsGroup.blocksRaycasts = true;
@@ -93,6 +102,8 @@ public class ShowHideSettings : MonoBehaviour
 
     public void HideCredits()
     {
+        if (creditsGroup == null || mainMenuGroup == null) return;
+
         creditsGroup.alpha = 0;
         creditsGroup.interactable = false;
         creditsGroup.blocksRaycasts = false;
@@ -100,23 +111,50 @@ public class ShowHideSettings : MonoBehaviour
         mainMenuGroup.interactable = true;
     }
 
+    public void ShowBugs()
+    {
+        if (bugsGroup == null || mainMenuGroup == null) return;
+
+        bugsGroup.alpha = 1;
+        bugsGroup.interactable = true;
+        bugsGroup.blocksRaycasts = true;
+
+        mainMenuGroup.interactable = false;
+    }
+
+    public void HideBugs()
+    {
+        if (bugsGroup == null || mainMenuGroup == null) return;
+
+        bugsGroup.alpha = 0;
+        bugsGroup.interactable = false;
+        bugsGroup.blocksRaycasts = false;
+
+        mainMenuGroup.interactable = true;
+    }
 
     // ----------------------------------------
     // VOLUME SETTINGS
     // ----------------------------------------
     public void SetVolume()
     {
+        if (volumeSlider == null) return;
+
         AudioListener.volume = volumeSlider.value;
         SaveVolume();
     }
 
     public void SaveVolume()
     {
+        if (volumeSlider == null) return;
+
         PlayerPrefs.SetFloat("soundVolume", volumeSlider.value);
     }
 
     public void LoadVolume()
     {
-        volumeSlider.value = PlayerPrefs.GetFloat("soundVolume");
+        if (volumeSlider == null) return;
+
+        volumeSlider.value = PlayerPrefs.GetFloat("soundVolume", 1f);
     }
 }

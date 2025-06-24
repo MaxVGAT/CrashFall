@@ -4,12 +4,21 @@ using UnityEngine;
 
 public class UnlockDoor : MonoBehaviour
 {
+    //==================================================
+    // SINGLETON INSTANCE
+    //==================================================
     public static UnlockDoor Instance { get; private set; }
 
+    //==================================================
+    // SETTINGS
+    //==================================================
     [Header("Settings")]
     [SerializeField] private GameObject City_Door;
     [SerializeField] private Animator animator;
 
+    //==================================================
+    // UNITY EVENTS
+    //==================================================
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -24,18 +33,21 @@ public class UnlockDoor : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
-        SoundManager.Instance.PlayDoorOpenSFX();
-        animator.SetBool("isPlayerNear", true);
-        InteractionPrompt.Instance.ShowPrompt();
+        SoundManager.Instance?.PlayDoorOpenSFX();
+        if (animator != null)
+            animator.SetBool("isPlayerNear", true);
+
+        InteractionPrompt.Instance?.ShowPrompt();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player")) return;
 
-        SoundManager.Instance.PlayDoorCloseSFX();
-        animator.SetBool("isPlayerNear", false);
-        InteractionPrompt.Instance.HidePrompt();
-    }
+        SoundManager.Instance?.PlayDoorCloseSFX();
+        if (animator != null)
+            animator.SetBool("isPlayerNear", false);
 
+        InteractionPrompt.Instance?.HidePrompt();
+    }
 }

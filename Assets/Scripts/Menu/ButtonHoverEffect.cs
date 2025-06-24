@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -17,7 +16,6 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public AudioClip closeSound;
 
     private ParticleSystem currentEffect;
-    GameManager Instance;
 
     //==================================================
     // UI HOVER EFFECT
@@ -32,16 +30,17 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (audioSource != null && hoverSound != null)
         {
-            SoundManager.Instance.PlaySFX(hoverSound);
+            SoundManager.Instance?.PlaySFX(hoverSound);
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (hoverEffect != null)
+        if (currentEffect != null)
         {
             currentEffect.Stop();
             Destroy(currentEffect.gameObject, currentEffect.main.duration);
+            currentEffect = null;
         }
     }
 
@@ -50,24 +49,23 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     //==================================================
     public void OpenSFX()
     {
-        if (audioSource != null)
+        if (audioSource != null && openSound != null)
         {
-            SoundManager.Instance.PlaySFX(openSound);
+            SoundManager.Instance?.PlaySFX(openSound);
         }
     }
 
     public void CloseSFX()
     {
-        if (audioSource != null)
+        if (audioSource != null && closeSound != null)
         {
-            SoundManager.Instance.PlaySFX(closeSound);
+            SoundManager.Instance?.PlaySFX(closeSound);
         }
     }
 
     //==================================================
     // SCENE TRANSITION
     //==================================================
-
     public void StartGameAtTuto()
     {
         MenuToGame("InGame", "Tuto_Spawn_Point");

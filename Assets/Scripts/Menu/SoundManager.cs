@@ -41,8 +41,8 @@ public class SoundManager : MonoBehaviour
                 Debug.LogWarning($"[SoundManager] Detaching unexpected Canvas child '{child.name}'");
                 child.SetParent(null);
             }
-
         }
+
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -56,7 +56,6 @@ public class SoundManager : MonoBehaviour
         sfxVolume = PlayerPrefs.GetFloat("SFXVolume", sfxVolume);
 
         ApplyVolumes();
-
     }
 
     private void OnTransformChildrenChanged()
@@ -67,8 +66,6 @@ public class SoundManager : MonoBehaviour
             foreach (Transform child in transform)
             {
                 Debug.LogError($"- {child.name} (from scene: {child.gameObject.scene.name})");
-
-                // Detach any Canvas that gets parented to us
                 if (child.GetComponent<Canvas>() != null)
                 {
                     Debug.LogWarning($"[SoundManager] Emergency detaching Canvas child '{child.name}'");
@@ -145,7 +142,6 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-
     public void PlayCheckpointSFX() => PlaySFX(checkpointSound);
     public void PlayNPCSFX() => PlaySFX(npcSound);
     public void PlayTeleportSFX() => PlaySFX(teleportSound);
@@ -155,7 +151,6 @@ public class SoundManager : MonoBehaviour
     public void PlayJumpSFX() => PlaySFX(jumpSound);
     public void PlayDashSFX() => PlaySFX(dashSound);
     public void PickUpSFX() => PlaySFX(itemSound);
-
     public void PauseSFX() => PlaySFX(pauseSound);
 
     public void SetMusicVolume(float volume)
