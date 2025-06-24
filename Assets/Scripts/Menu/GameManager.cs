@@ -124,6 +124,17 @@ public class GameManager : MonoBehaviour
     {
         isTimerRunning = true;
 
+        if(scene.name == "MainMenu")
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
         if (!string.IsNullOrEmpty(nextSpawn))
         {
             GameObject player = GameObject.FindWithTag("Player"); // Assuming your player is tagged correctly

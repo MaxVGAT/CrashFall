@@ -287,10 +287,10 @@ public class PlayerMove : MonoBehaviour
         bool grounded = onGround || onPlatform;
 
         if (grounded)
+        {
             jumpsRemaining = canDoubleJump ? 1 : 0;
-
-        if (!grounded && !isDashing)
             canDash = true;
+        }
 
         return grounded;
     }
