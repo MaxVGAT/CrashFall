@@ -11,10 +11,10 @@ public class ItemPickup : MonoBehaviour
     // ======= SETTINGS ===========
     // ============================
     [Header("Settings")]
-    [SerializeField] private GameObject player;
-    [SerializeField] private GameObject DJCard;
-    [SerializeField] private GameObject dashCard;
-    [SerializeField] private PickupType cardType;
+    [SerializeField] private GameObject player;      // Player reference
+    [SerializeField] private GameObject DJCard;      // Double jump visual
+    [SerializeField] private GameObject dashCard;    // Dash ability visual
+    [SerializeField] private PickupType cardType;    // Type of ability to unlock
 
     // Reference to the player's movement script
     public PlayerMove Player;
@@ -32,6 +32,7 @@ public class ItemPickup : MonoBehaviour
             return;
         }
 
+        // Grant appropriate ability based on pickup type
         switch (cardType)
         {
             case PickupType.DoubleJump:
@@ -43,7 +44,7 @@ public class ItemPickup : MonoBehaviour
                 break;
         }
 
-        // Disable this pickup and play sound
+        // Disable pickup and play sound effect
         gameObject.SetActive(false);
 
         if (SoundManager.Instance != null)

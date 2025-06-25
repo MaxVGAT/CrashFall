@@ -2,12 +2,14 @@
 // INTERACTION PROMPT WITH DEBUG LOGGING
 // ==================================================
 using UnityEngine;
+
 public class InteractionPrompt : MonoBehaviour
 {
     // ----------------------------------------
     // SINGLETON INSTANCE
     // ----------------------------------------
     public static InteractionPrompt Instance { get; private set; }
+
     // ----------------------------------------
     // SERIALIZED FIELDS
     // ----------------------------------------
@@ -17,11 +19,13 @@ public class InteractionPrompt : MonoBehaviour
     [SerializeField] private float pulseSpeed = 2f;
     [SerializeField] private float maxPulseSize = 1.2f;
     [SerializeField] private float minPulseSize = 1f;
+
     // ----------------------------------------
     // PRIVATE FIELDS
     // ----------------------------------------
     private Vector3 baseScale;
     private Camera mainCamera;
+
     // ----------------------------------------
     // UNITY EVENTS
     // ----------------------------------------
@@ -39,10 +43,7 @@ public class InteractionPrompt : MonoBehaviour
         Instance = this;
         Debug.Log($"[InteractionPrompt] Singleton instance set on: {gameObject.name}");
 
-        // Debug serialized field assignments
-        Debug.Log($"[InteractionPrompt] Player reference: {(player != null ? player.name : "NULL")}");
-        Debug.Log($"[InteractionPrompt] Prompt reference: {(prompt != null ? prompt.name : "NULL")}");
-
+        // Cache base scale and hide prompt if assigned
         if (prompt != null)
         {
             baseScale = prompt.transform.localScale;
@@ -62,11 +63,10 @@ public class InteractionPrompt : MonoBehaviour
     {
         Debug.Log("[InteractionPrompt] Start() called");
 
-        // Re-check references in Start (some objects might not be available in Awake)
+        // Re-check player reference, try to find it if missing
         if (player == null)
         {
             Debug.LogWarning("[InteractionPrompt] Player reference is still NULL in Start()");
-            // Try to find player
             GameObject playerObj = GameObject.FindWithTag("Player");
             if (playerObj != null)
             {
@@ -79,30 +79,26 @@ public class InteractionPrompt : MonoBehaviour
             }
         }
 
+        // Re-check prompt reference, attempt various find methods if missing
         if (prompt == null)
         {
             Debug.LogWarning("[InteractionPrompt] Prompt is still NULL in Start(). Trying to find it...");
 
-            // Try multiple methods to find the prompt
             GameObject foundPrompt = null;
 
-            // Method 1: Find by name
+            // Try find by name
             foundPrompt = GameObject.Find("InteractionPrompt");
             if (foundPrompt != null)
-            {
                 Debug.Log($"[InteractionPrompt] Found prompt by name: {foundPrompt.name}");
-            }
 
-            // Method 2: Find by tag (if you set up a tag)
+            // Try find by tag if not found by name
             if (foundPrompt == null)
             {
                 try
                 {
                     foundPrompt = GameObject.FindWithTag("InteractionPrompt");
                     if (foundPrompt != null)
-                    {
                         Debug.Log($"[InteractionPrompt] Found prompt by tag: {foundPrompt.name}");
-                    }
                 }
                 catch
                 {
@@ -110,13 +106,12 @@ public class InteractionPrompt : MonoBehaviour
                 }
             }
 
-            // Method 3: Look in UI Canvas
+            // Try searching in canvases if still not found
             if (foundPrompt == null)
             {
                 Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
                 foreach (Canvas canvas in canvases)
                 {
-                    // Try common prompt names
                     string[] promptNames = { "InteractionPrompt", "Prompt", "UIPrompt", "E_Prompt", "InteractionUI" };
 
                     foreach (string promptName in promptNames)
@@ -125,7 +120,6 @@ public class InteractionPrompt : MonoBehaviour
                         if (promptTransform != null)
                         {
                             foundPrompt = promptTransform.gameObject;
-                            Debug.Log($"[InteractionPrompt] Found prompt in canvas {canvas.name}: {foundPrompt.name}");
                             break;
                         }
                     }
@@ -134,7 +128,7 @@ public class InteractionPrompt : MonoBehaviour
                 }
             }
 
-            // Method 4: Look for any GameObject with "prompt" in the name (case insensitive)
+            // Fallback: find any object with 'prompt' in name (case insensitive)
             if (foundPrompt == null)
             {
                 GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
@@ -143,7 +137,6 @@ public class InteractionPrompt : MonoBehaviour
                     if (obj.name.ToLower().Contains("prompt"))
                     {
                         foundPrompt = obj;
-                        Debug.Log($"[InteractionPrompt] Found object with 'prompt' in name: {foundPrompt.name}");
                         break;
                     }
                 }
@@ -154,26 +147,22 @@ public class InteractionPrompt : MonoBehaviour
                 prompt = foundPrompt;
                 baseScale = prompt.transform.localScale;
                 prompt.SetActive(false);
-                Debug.Log($"[InteractionPrompt] Prompt successfully found and assigned: {prompt.name}");
             }
             else
             {
-                Debug.LogError("[InteractionPrompt] Could not find prompt GameObject in scene! Make sure there's a GameObject named 'InteractionPrompt' or assign it manually in the inspector.");
             }
         }
 
+        // Re-check main camera reference if missing
         if (mainCamera == null)
         {
-            Debug.LogWarning("[InteractionPrompt] Main camera is NULL in Start()");
             Camera[] cameras = FindObjectsByType<Camera>(FindObjectsSortMode.None);
             if (cameras.Length > 0)
             {
                 mainCamera = cameras[0];
-                Debug.Log($"[InteractionPrompt] Camera found via FindObjectsByType: {mainCamera.name}");
             }
             else
             {
-                Debug.LogError("[InteractionPrompt] No cameras found in scene!");
             }
         }
     }
@@ -201,8 +190,11 @@ public class InteractionPrompt : MonoBehaviour
             return;
         }
 
+        // Position prompt above player and face the camera
         prompt.transform.position = player.position + promptOffset;
         prompt.transform.forward = mainCamera.transform.forward;
+
+        // Pulse scale effect
         float normalizedSin = (Mathf.Sin(Time.time * pulseSpeed) + 1f) / 2f;
         float scale = Mathf.Lerp(minPulseSize, maxPulseSize, normalizedSin);
         prompt.transform.localScale = Vector3.one * scale;
@@ -210,11 +202,9 @@ public class InteractionPrompt : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log($"[InteractionPrompt] OnDestroy() called on: {gameObject.name}");
         if (Instance == this)
         {
             Instance = null;
-            Debug.Log("[InteractionPrompt] Singleton instance cleared");
         }
     }
 
@@ -223,7 +213,6 @@ public class InteractionPrompt : MonoBehaviour
     // ----------------------------------------
     public void ShowPrompt()
     {
-        Debug.Log("[InteractionPrompt] ShowPrompt() called");
 
         if (prompt == null)
         {
@@ -250,7 +239,6 @@ public class InteractionPrompt : MonoBehaviour
 
     public void HidePrompt()
     {
-        Debug.Log("[InteractionPrompt] HidePrompt() called");
 
         if (prompt == null)
         {
@@ -267,20 +255,6 @@ public class InteractionPrompt : MonoBehaviour
         {
             Debug.Log("[InteractionPrompt] Prompt is already inactive");
         }
-    }
-
-    // ----------------------------------------
-    // DEBUG METHODS (Remove in production)
-    // ----------------------------------------
-    public void DebugCurrentState()
-    {
-        Debug.Log("=== INTERACTION PROMPT DEBUG STATE ===");
-        Debug.Log($"Instance exists: {Instance != null}");
-        Debug.Log($"Player reference: {(player != null ? player.name : "NULL")}");
-        Debug.Log($"Prompt reference: {(prompt != null ? prompt.name : "NULL")}");
-        Debug.Log($"Prompt active: {(prompt != null ? prompt.activeSelf.ToString() : "N/A")}");
-        Debug.Log($"Main camera: {(mainCamera != null ? mainCamera.name : "NULL")}");
-        Debug.Log("=====================================");
     }
 }
 // ==================================================

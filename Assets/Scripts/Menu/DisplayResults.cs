@@ -21,6 +21,7 @@ public class DisplayResults : MonoBehaviour
 
         if (gameManager != null)
         {
+            // Store current death count and timer string
             deaths = gameManager.deathCounter;
             timer = gameManager.GetFormattedTime();
         }
@@ -34,6 +35,7 @@ public class DisplayResults : MonoBehaviour
 
     private void Update()
     {
+        // If player is near and presses E, display results
         if (seeResult && Input.GetKeyDown(KeyCode.E))
         {
             if (gameManager != null)
@@ -51,6 +53,7 @@ public class DisplayResults : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
+        // Enable result display trigger and show prompt
         seeResult = true;
         InteractionPrompt.Instance.ShowPrompt();
     }
@@ -59,6 +62,7 @@ public class DisplayResults : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
+        // Disable result trigger and hide prompt
         seeResult = false;
         InteractionPrompt.Instance.HidePrompt();
     }

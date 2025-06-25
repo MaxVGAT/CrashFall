@@ -1,6 +1,5 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
+using TMPro;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -69,35 +68,40 @@ public class GameManager : MonoBehaviour
     //==================================================
     private void Awake()
     {
+        // Singleton pattern setup
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); // Persist between scenes
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // Destroy duplicate
         }
     }
 
     private void Start()
     {
+        // Set custom cursor and hide pause UI initially
         Cursor.SetCursor(customCursor, hotspot, CursorMode.Auto);
         pauseCanvas.SetActive(false);
     }
 
     private void Update()
     {
+        // Toggle pause menu on Escape key if not in MainMenu
         if (SceneManager.GetActiveScene().name != "MainMenu" && Input.GetKeyDown(KeyCode.Escape))
         {
             PauseGame();
         }
 
+        // Run timer when active
         if (isTimerRunning)
         {
             timer += Time.deltaTime;
         }
 
+        // Update timer UI or clear text in main menu
         if (timerText != null)
         {
             if (SceneManager.GetActiveScene().name == "MainMenu")
@@ -126,9 +130,11 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // Start timer on scene load
         isTimerRunning = true;
 
-        if(scene.name == "MainMenu")
+        // Cursor visibility based on scene
+        if (scene.name == "MainMenu")
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
@@ -139,9 +145,10 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
 
+        // Teleport player to the correct spawn point if available
         if (!string.IsNullOrEmpty(nextSpawn))
         {
-            GameObject player = GameObject.FindWithTag("Player"); // Assuming your player is tagged correctly
+            GameObject player = GameObject.FindWithTag("Player"); // Player must be tagged
             GameObject spawnPoint = GameObject.Find(nextSpawn);
 
             if (player != null && spawnPoint != null)
@@ -158,12 +165,12 @@ public class GameManager : MonoBehaviour
         Debug.Log(nextSpawn);
     }
 
-
     //==================================================
     // TIMER FORMATTING
     //==================================================
     private string FormatTime(float timeInSeconds)
     {
+        // Format time as MM:SS.milliseconds
         int minutes = Mathf.FloorToInt(timeInSeconds / 60f);
         int seconds = Mathf.FloorToInt(timeInSeconds % 60f);
         int milliseconds = Mathf.FloorToInt((timeInSeconds * 1000f) % 1000f);
@@ -188,6 +195,7 @@ public class GameManager : MonoBehaviour
         nextScene = sceneName;
         nextSpawn = spawnPoint;
 
+        // Reset checkpoint flags on new scene start as needed
         switch (sceneName)
         {
             case "CityLevel":
@@ -263,6 +271,7 @@ public class GameManager : MonoBehaviour
     //==================================================
     public void PauseGame()
     {
+        // Toggle pause state and update UI, timescale, and SFX
         isPaused = !isPaused;
         pauseCanvas.SetActive(isPaused);
         Time.timeScale = isPaused ? 0f : 1f;
@@ -303,16 +312,5 @@ public class GameManager : MonoBehaviour
     public string GetFormattedTime()
     {
         return FormatTime(timer);
-    }
-
-    //==================================================
-    // RETURN TO MENU ON RESULT SCREEN
-    //==================================================
-    public void ReturnToMenu()
-    {
-        if (isResultShown && Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            SceneManager.LoadScene("MainMenu");
-        }
     }
 }

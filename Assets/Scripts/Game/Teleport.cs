@@ -46,6 +46,7 @@ public class Teleport : MonoBehaviour
     //==================================================
     private void Start()
     {
+        // Ensure only inactive portals are shown on start
         TP_Active_Forest.SetActive(false);
         TP_Active_Castle.SetActive(false);
 
@@ -55,9 +56,10 @@ public class Teleport : MonoBehaviour
 
     private void Update()
     {
-        // Adjust camera offset every frame — might be better elsewhere, but unchanged per your request
+        // Keeps camera offset fixed at all times
         cameraFollow.cameraOffset = new Vector3(0, 2f, -10f);
 
+        // Activate portals based on player progress
         if (GameManager.Instance != null)
         {
             if (GameManager.Instance.canDoubleJump)
@@ -67,6 +69,7 @@ public class Teleport : MonoBehaviour
                 SetCastlePortalActive(true);
         }
 
+        // Handle teleport trigger when player presses E
         if (currentTeleport == this && Input.GetKeyDown(KeyCode.E))
         {
             if (SoundManager.Instance != null)
@@ -147,7 +150,7 @@ public class Teleport : MonoBehaviour
         if (!collision.CompareTag("Player")) return;
 
         currentTeleport = this;
-        InteractionPrompt.Instance?.ShowPrompt();
+        InteractionPrompt.Instance?.ShowPrompt(); // Show "Press E" interaction prompt
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -157,7 +160,7 @@ public class Teleport : MonoBehaviour
         if (currentTeleport == this)
             currentTeleport = null;
 
-        InteractionPrompt.Instance?.HidePrompt();
+        InteractionPrompt.Instance?.HidePrompt(); // Hide prompt when player exits zone
     }
 
     //==================================================

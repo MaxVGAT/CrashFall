@@ -10,39 +10,40 @@ public class Levers : MonoBehaviour
     // ====== LEVER STATE =========
     // ============================
     [Header("Lever State")]
-    [SerializeField] private GameObject Inactive_Lever;
-    [SerializeField] private GameObject Active_Lever;
+    [SerializeField] private GameObject Inactive_Lever;  // Lever visual when off
+    [SerializeField] private GameObject Active_Lever;    // Lever visual when on
 
     // ============================
     // ======= FENCE ELEMENTS =====
     // ============================
     [Header("Fence")]
-    [SerializeField] private Transform Left_Gate;
-    [SerializeField] private Transform Right_Gate;
+    [SerializeField] private Transform Left_Gate;   // Left gate transform
+    [SerializeField] private Transform Right_Gate;  // Right gate transform
 
     // ============================
     // ======= FENCE STATE ========
     // ============================
     [Header("Fence State")]
-    [SerializeField] private Vector3 leftClosedLocalPos;
-    [SerializeField] private Vector3 rightClosedLocalPos;
-    [SerializeField] private Vector3 leftOpenedLocalPos;
-    [SerializeField] private Vector3 rightOpenedLocalPos;
+    [SerializeField] private Vector3 leftClosedLocalPos;   // Closed position for left gate
+    [SerializeField] private Vector3 rightClosedLocalPos;  // Closed position for right gate
+    [SerializeField] private Vector3 leftOpenedLocalPos;   // Open position for left gate
+    [SerializeField] private Vector3 rightOpenedLocalPos;  // Open position for right gate
 
-    [SerializeField] private Collider2D leftGateCollider;
-    [SerializeField] private Collider2D rightGateCollider;
+    [SerializeField] private Collider2D leftGateCollider;  // Collider for left gate
+    [SerializeField] private Collider2D rightGateCollider; // Collider for right gate
 
     // ============================
     // ===== INTERNAL STATE =======
     // ============================
-    private bool isPlayerInside = false;
-    private bool isLeverActive = false;
+    private bool isPlayerInside = false;  // Tracks if player is in interaction range
+    private bool isLeverActive = false;   // Current lever state
 
     // ============================
     // ====== UNITY EVENTS ========
     // ============================
     private void Start()
     {
+        // Initialize lever and gate states
         if (Active_Lever != null) Active_Lever.SetActive(false);
         if (Inactive_Lever != null) Inactive_Lever.SetActive(true);
 
@@ -71,6 +72,7 @@ public class Levers : MonoBehaviour
 
     private void Update()
     {
+        // Handle lever interaction input
         if (isPlayerInside && Input.GetKeyDown(KeyCode.E))
         {
             ToggleLeverAndFence();
@@ -84,7 +86,6 @@ public class Levers : MonoBehaviour
         {
             isPlayerInside = true;
             Debug.Log("[Levers] Player entered trigger.");
-            //tpConfirmationPanel.SetActive(true);
         }
     }
 
@@ -94,7 +95,6 @@ public class Levers : MonoBehaviour
         {
             isPlayerInside = false;
             Debug.Log("[Levers] Player exited trigger.");
-            //tpConfirmationPanel.SetActive(false);
         }
     }
 
@@ -103,6 +103,7 @@ public class Levers : MonoBehaviour
     // ============================
     public void SetLeverActive(bool active)
     {
+        // Set lever state and update visuals
         isLeverActive = active;
         if (Active_Lever != null) Active_Lever.SetActive(isLeverActive);
         if (Inactive_Lever != null) Inactive_Lever.SetActive(!isLeverActive);
@@ -110,18 +111,15 @@ public class Levers : MonoBehaviour
 
     private void ToggleLeverAndFence()
     {
+        // Toggle lever state and gate position
         isLeverActive = !isLeverActive;
 
         if (isLeverActive)
         {
-            if (Active_Lever != null) Active_Lever.SetActive(true);
-            if (Inactive_Lever != null) Inactive_Lever.SetActive(false);
             OpenFence();
         }
         else
         {
-            if (Active_Lever != null) Active_Lever.SetActive(false);
-            if (Inactive_Lever != null) Inactive_Lever.SetActive(true);
             CloseFence();
         }
     }
@@ -131,6 +129,7 @@ public class Levers : MonoBehaviour
     // ============================
     private void OpenFence()
     {
+        // Open both gates with rotation and disable colliders
         if (Left_Gate != null)
         {
             Left_Gate.localPosition = leftOpenedLocalPos;
@@ -148,6 +147,7 @@ public class Levers : MonoBehaviour
 
     private void CloseFence()
     {
+        // Close both gates and enable colliders
         if (Left_Gate != null)
         {
             Left_Gate.localPosition = leftClosedLocalPos;

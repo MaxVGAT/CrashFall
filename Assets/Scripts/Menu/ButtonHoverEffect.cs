@@ -22,12 +22,14 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     //==================================================
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // Spawn and play hover VFX on pointer enter
         if (hoverEffect != null)
         {
             currentEffect = Instantiate(hoverEffect, transform.position, hoverEffect.transform.rotation, transform);
             currentEffect.Play();
         }
 
+        // Play hover SFX
         if (audioSource != null && hoverSound != null)
         {
             SoundManager.Instance?.PlaySFX(hoverSound);
@@ -36,6 +38,7 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        // Stop and clean up the hover effect
         if (currentEffect != null)
         {
             currentEffect.Stop();
@@ -49,6 +52,7 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     //==================================================
     public void OpenSFX()
     {
+        // Play open sound (e.g., for opening menus)
         if (audioSource != null && openSound != null)
         {
             SoundManager.Instance?.PlaySFX(openSound);
@@ -57,6 +61,7 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void CloseSFX()
     {
+        // Play close sound (e.g., for closing menus)
         if (audioSource != null && closeSound != null)
         {
             SoundManager.Instance?.PlaySFX(closeSound);
@@ -68,11 +73,13 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     //==================================================
     public void StartGameAtTuto()
     {
+        // Shortcut to load the tutorial scene
         MenuToGame("InGame", "Tuto_Spawn_Point");
     }
 
     public void MenuToGame(string sceneName, string spawnPoint)
     {
+        // Start a new scene using GameManager
         if (GameManager.Instance != null)
         {
             GameManager.Instance.StartGame(sceneName, spawnPoint);

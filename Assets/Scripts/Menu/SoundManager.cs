@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
+    // Singleton instance for global access
     public static SoundManager Instance { get; private set; }
 
     [Header("Audio Sources")]
@@ -35,6 +36,7 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
+        // Detach any unexpected Canvas children (defensive)
         foreach (Transform child in transform)
         {
             if (child.GetComponent<Canvas>() != null)
@@ -44,6 +46,7 @@ public class SoundManager : MonoBehaviour
             }
         }
 
+        // Singleton pattern enforcement
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -53,31 +56,16 @@ public class SoundManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        // Load saved volume settings
         musicVolume = PlayerPrefs.GetFloat("MusicVolume", musicVolume);
         sfxVolume = PlayerPrefs.GetFloat("SFXVolume", sfxVolume);
 
         ApplyVolumes();
     }
 
-    private void OnTransformChildrenChanged()
-    {
-        if (transform.childCount > 0)
-        {
-            Debug.LogError($"SoundManager gained unexpected children:");
-            foreach (Transform child in transform)
-            {
-                Debug.LogError($"- {child.name} (from scene: {child.gameObject.scene.name})");
-                if (child.GetComponent<Canvas>() != null)
-                {
-                    Debug.LogWarning($"[SoundManager] Emergency detaching Canvas child '{child.name}'");
-                    child.SetParent(null);
-                }
-            }
-        }
-    }
-
     private void Start()
     {
+        // Initialize music for current scene
         OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
@@ -91,6 +79,7 @@ public class SoundManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    // Play appropriate music based on loaded scene
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         switch (scene.name)
@@ -113,12 +102,14 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    // Play a sound effect once at specified volume
     public void PlaySFX(AudioClip clip)
     {
         if (clip == null) return;
         sfxSource.PlayOneShot(clip, sfxVolume);
     }
 
+    // Play or switch music, avoid restarting same clip
     public void PlayMusic(AudioClip musicClip, bool loop = true)
     {
         if (musicSource.clip == musicClip && musicSource.isPlaying) return;
@@ -136,6 +127,7 @@ public class SoundManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        // Log destruction for debugging
         Debug.Log($"SoundManager being destroyed. Children count: {transform.childCount}");
         foreach (Transform child in transform)
         {
@@ -143,6 +135,7 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    // Convenience methods for specific SFX
     public void PlayCheckpointSFX() => PlaySFX(checkpointSound);
     public void PlayNPCSFX() => PlaySFX(npcSound);
     public void PlayTeleportSFX() => PlaySFX(teleportSound);
@@ -155,6 +148,7 @@ public class SoundManager : MonoBehaviour
     public void PauseSFX() => PlaySFX(pauseSound);
     public void ClearSFX() => PlaySFX(endSound);
 
+    // Set music volume and save preference
     public void SetMusicVolume(float volume)
     {
         musicVolume = Mathf.Clamp01(volume);
@@ -162,6 +156,7 @@ public class SoundManager : MonoBehaviour
         PlayerPrefs.SetFloat("MusicVolume", musicVolume);
     }
 
+    // Set SFX volume and save preference
     public void SetSFXVolume(float volume)
     {
         sfxVolume = Mathf.Clamp01(volume);
@@ -169,6 +164,7 @@ public class SoundManager : MonoBehaviour
         PlayerPrefs.SetFloat("SFXVolume", sfxVolume);
     }
 
+    // Apply volume settings to audio sources
     private void ApplyVolumes()
     {
         musicSource.volume = musicVolume;

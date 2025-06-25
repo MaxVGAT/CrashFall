@@ -11,11 +11,13 @@ public class DeathCounter : MonoBehaviour
     //==================================================
     private void OnEnable()
     {
+        // Register scene loaded callback
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
+        // Unregister to avoid memory leaks
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
@@ -27,11 +29,13 @@ public class DeathCounter : MonoBehaviour
 
     private void Update()
     {
+        // Continuously update death count display
         UpdateDeathCounter();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // Update display when a new scene loads
         UpdateDisplay(scene.name);
         UpdateDeathCounter();
     }
@@ -41,12 +45,14 @@ public class DeathCounter : MonoBehaviour
     //==================================================
     private void UpdateDisplay(string sceneName)
     {
+        // Hide death counter in main menu
         bool isMainMenu = sceneName == "MainMenu";
         deathCounterText.gameObject.SetActive(!isMainMenu);
     }
 
     private void UpdateDeathCounter()
     {
+        // Update counter text from GameManager
         if (GameManager.Instance != null)
         {
             deathCounterText.text = "Deaths: " + GameManager.Instance.deathCounter;

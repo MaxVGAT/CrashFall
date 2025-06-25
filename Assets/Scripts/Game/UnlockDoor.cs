@@ -21,6 +21,7 @@ public class UnlockDoor : MonoBehaviour
     //==================================================
     private void Awake()
     {
+        // Ensure only one instance exists
         if (Instance != null && Instance != this)
         {
             Destroy(this);
@@ -33,10 +34,12 @@ public class UnlockDoor : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
+        // Play open sound and show door open animation
         SoundManager.Instance?.PlayDoorOpenSFX();
         if (animator != null)
             animator.SetBool("isPlayerNear", true);
 
+        // Show "Press E" prompt
         InteractionPrompt.Instance?.ShowPrompt();
     }
 
@@ -44,10 +47,12 @@ public class UnlockDoor : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
+        // Play close sound and hide door animation
         SoundManager.Instance?.PlayDoorCloseSFX();
         if (animator != null)
             animator.SetBool("isPlayerNear", false);
 
+        // Hide interaction prompt
         InteractionPrompt.Instance?.HidePrompt();
     }
 }

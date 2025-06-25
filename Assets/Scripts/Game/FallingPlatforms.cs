@@ -8,9 +8,9 @@ public class FallingPlatforms : MonoBehaviour
     // ============================
     [Header("Settings")]
     [SerializeField] private GameObject Player;
-    [SerializeField] private GameObject crumblingBlock;
-    [SerializeField] private float crumblingSpeed = 1f;
-    [SerializeField] private float respawnTimer = 5f;
+    [SerializeField] private GameObject crumblingBlock;  // The platform that will crumble
+    [SerializeField] private float crumblingSpeed = 1f;   // How fast the crumbling effect occurs
+    [SerializeField] private float respawnTimer = 5f;    // Time before platform reappears
 
     // ============================
     // ======== STATE =============
@@ -25,13 +25,14 @@ public class FallingPlatforms : MonoBehaviour
     private BoxCollider2D blockCollider;
 
     private Color originalColor;
-    private readonly Color crumblingColor = Color.red;
+    private readonly Color crumblingColor = Color.red;  // Visual indicator during crumbling
 
     // ============================
     // ========= START ============
     // ============================
     private void Start()
     {
+        // Validate required components
         if (crumblingBlock == null)
         {
             Debug.LogError("[FallingPlatforms] crumblingBlock reference missing!");
@@ -60,6 +61,7 @@ public class FallingPlatforms : MonoBehaviour
     {
         if (!isCrumbling) return;
 
+        // Handle crumbling visual effect and timing
         crumblingTimer -= Time.deltaTime;
         colorLerpProgress += Time.deltaTime * crumblingSpeed;
 
@@ -67,6 +69,7 @@ public class FallingPlatforms : MonoBehaviour
 
         if (crumblingTimer <= 0f && crumblingBlock.activeSelf)
         {
+            // Disable platform when crumbling completes
             blockRenderer.enabled = false;
             blockCollider.enabled = false;
 
@@ -82,6 +85,7 @@ public class FallingPlatforms : MonoBehaviour
     // ============================
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // Start crumbling when player lands on platform
         if (collision.gameObject.CompareTag("Player") && !isCrumbling && !hasCrumbled)
         {
             isCrumbling = true;
@@ -97,6 +101,7 @@ public class FallingPlatforms : MonoBehaviour
     {
         yield return new WaitForSeconds(respawnTimer);
 
+        // Reset platform to original state
         blockRenderer.color = originalColor;
         blockRenderer.enabled = true;
         blockCollider.enabled = true;

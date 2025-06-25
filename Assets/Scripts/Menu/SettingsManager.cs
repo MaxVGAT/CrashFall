@@ -23,7 +23,7 @@ public class ShowHideSettings : MonoBehaviour
     // ----------------------------------------
     private void Start()
     {
-        // Initialize settings and credits groups to invisible and non-interactable
+        // Initialize settings, credits, bugs panels as hidden and non-interactable
         if (settingsGroup != null)
         {
             settingsGroup.alpha = 0;
@@ -53,6 +53,7 @@ public class ShowHideSettings : MonoBehaviour
     {
         if (settingsGroup == null) return;
 
+        // Show tutorial panel and enable interaction
         settingsGroup.alpha = 1;
         settingsGroup.interactable = true;
         settingsGroup.blocksRaycasts = true;
@@ -62,6 +63,7 @@ public class ShowHideSettings : MonoBehaviour
     {
         if (settingsGroup == null) return;
 
+        // Hide tutorial panel and disable interaction
         settingsGroup.alpha = 0;
         settingsGroup.interactable = false;
         settingsGroup.blocksRaycasts = false;
@@ -71,6 +73,7 @@ public class ShowHideSettings : MonoBehaviour
     {
         if (settingsGroup == null || mainMenuGroup == null) return;
 
+        // Show settings panel, disable main menu interaction
         settingsGroup.alpha = 1;
         settingsGroup.interactable = true;
         settingsGroup.blocksRaycasts = true;
@@ -82,6 +85,7 @@ public class ShowHideSettings : MonoBehaviour
     {
         if (settingsGroup == null || mainMenuGroup == null) return;
 
+        // Hide settings panel, re-enable main menu interaction
         settingsGroup.alpha = 0;
         settingsGroup.interactable = false;
         settingsGroup.blocksRaycasts = false;
@@ -93,6 +97,7 @@ public class ShowHideSettings : MonoBehaviour
     {
         if (creditsGroup == null || mainMenuGroup == null) return;
 
+        // Show credits panel, disable main menu interaction
         creditsGroup.alpha = 1;
         creditsGroup.interactable = true;
         creditsGroup.blocksRaycasts = true;
@@ -104,6 +109,7 @@ public class ShowHideSettings : MonoBehaviour
     {
         if (creditsGroup == null || mainMenuGroup == null) return;
 
+        // Hide credits panel, re-enable main menu interaction
         creditsGroup.alpha = 0;
         creditsGroup.interactable = false;
         creditsGroup.blocksRaycasts = false;
@@ -115,6 +121,7 @@ public class ShowHideSettings : MonoBehaviour
     {
         if (bugsGroup == null || mainMenuGroup == null) return;
 
+        // Show bugs panel, disable main menu interaction
         bugsGroup.alpha = 1;
         bugsGroup.interactable = true;
         bugsGroup.blocksRaycasts = true;
@@ -126,6 +133,7 @@ public class ShowHideSettings : MonoBehaviour
     {
         if (bugsGroup == null || mainMenuGroup == null) return;
 
+        // Hide bugs panel, re-enable main menu interaction
         bugsGroup.alpha = 0;
         bugsGroup.interactable = false;
         bugsGroup.blocksRaycasts = false;
@@ -140,6 +148,7 @@ public class ShowHideSettings : MonoBehaviour
     {
         if (volumeSlider == null) return;
 
+        // Update global volume and save setting
         AudioListener.volume = volumeSlider.value;
         SaveVolume();
     }
@@ -155,6 +164,7 @@ public class ShowHideSettings : MonoBehaviour
     {
         if (volumeSlider == null) return;
 
+        // Load saved volume or default to 1
         volumeSlider.value = PlayerPrefs.GetFloat("soundVolume", 1f);
     }
 }

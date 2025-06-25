@@ -69,7 +69,7 @@ public class PlayerMove : MonoBehaviour
     // DASH SETTINGS
     // ================================
     [Header("Dash")]
-    [SerializeField] private float dashSpeed = 15f;  // FIXED from 1f to 15f, because 1 is crawl speed
+    [SerializeField] private float dashSpeed = 15f;  // Fixed from 1f to 15f; 1 is crawl speed
     [SerializeField] private float dashDuration = 0.1f;
 
     private bool canDash = false;
@@ -111,7 +111,7 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
-        // PAUSE CHECK: don't move or play sounds while paused
+        // Pause check: don't move or play sounds while paused
         if (GameManager.Instance != null && GameManager.Instance.isPaused)
         {
             if (walkAudioSource.isPlaying)
@@ -126,14 +126,14 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        // APPLY HORIZONTAL VELOCITY
+        // Apply horizontal velocity
         rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
 
-        // CHECK GROUND AND APPLY GRAVITY
+        // Check ground and apply gravity
         grounded = GroundCheck();
         Gravity();
 
-        // HANDLE RUNNING SMOKE & WALK SOUND
+        // Handle running smoke and walk sound
         bool isRunning = animator.GetCurrentAnimatorStateInfo(0).IsName("player_run") && grounded && Mathf.Abs(horizontal) > 0.1f;
 
         if (isRunning)
@@ -160,18 +160,18 @@ public class PlayerMove : MonoBehaviour
             }
         }
 
-        // HANDLE FLIP BASED ON DIRECTION
+        // Flip based on movement direction
         if (horizontal > 0 && !isFacingRight)
             Flip();
         else if (horizontal < 0 && isFacingRight)
             Flip();
 
-        // UPDATE ANIMATOR PARAMETERS
+        // Update animator parameters
         animator.SetFloat("Speed", Mathf.Abs(horizontal));
         animator.SetBool("isGrounded", grounded);
         animator.SetFloat("verticalVelocity", rb.velocity.y);
 
-        // DASH INPUT CHECK
+        // Dash input check
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !isDashing && Mathf.Abs(horizontal) > 0.01f)
         {
             UseDash();
@@ -206,7 +206,7 @@ public class PlayerMove : MonoBehaviour
             }
         }
 
-        // FIXED: context.canceled must be outside context.performed
+        // Allow jump cancel to shorten jump height
         if (context.canceled && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);

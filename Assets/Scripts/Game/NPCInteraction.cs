@@ -8,36 +8,37 @@ public class NPCInteraction : MonoBehaviour
     // ============================
     // ======= ENUMS ==============
     // ============================
-    public enum InteractionType { OneSentence }
+    public enum InteractionType { OneSentence }  // Type of NPC interaction
 
     // ============================
     // ======= SETTINGS ===========
     // ============================
     [Header("Settings")]
-    [SerializeField] private Transform player;
-    [SerializeField] private GameObject player_Obj;
-    [SerializeField] private InteractionType interactionType;
+    [SerializeField] private Transform player;  // Player transform reference
+    [SerializeField] private GameObject player_Obj;  // Player gameobject
+    [SerializeField] private InteractionType interactionType;  // Interaction mode
 
     // ============================
     // ======= ONE SENTENCE =======
     // ============================
     [Header("OneSentence")]
-    [SerializeField] private GameObject oneSentencePanel;
-    [SerializeField] private TMP_Text dialogueComponent;
-    [SerializeField] private string dialogueLine;
+    [SerializeField] private GameObject oneSentencePanel;  // Dialogue UI panel
+    [SerializeField] private TMP_Text dialogueComponent;  // Text display component
+    [SerializeField] private string dialogueLine;  // NPC's dialogue text
 
-    [SerializeField] private Animator animator;
+    [SerializeField] private Animator animator;  // Optional NPC animations
 
     // ============================
     // ======= INTERNAL ===========
     // ============================
-    private bool isPlayerNearNPC = false;
+    private bool isPlayerNearNPC = false;  // Tracks player proximity
 
     // ============================
     // ======= UNITY EVENTS =======
     // ============================
     private void Start()
     {
+        // Initialize UI state
         if (oneSentencePanel != null)
             oneSentencePanel.SetActive(false);
     }
@@ -46,17 +47,18 @@ public class NPCInteraction : MonoBehaviour
     {
         if (player == null) return;
 
-        // Close dialogue panel on Escape
+        // Handle dialogue closing
         if (oneSentencePanel != null && oneSentencePanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
         {
             oneSentencePanel.SetActive(false);
+            return;
         }
 
-        // If dialogue panel is active, don't process new interactions
+        // Prevent new interactions while dialogue is active
         if (oneSentencePanel != null && oneSentencePanel.activeSelf)
             return;
 
-        // Open dialogue on E key if player near
+        // Process interaction input
         if (isPlayerNearNPC && Input.GetKeyDown(KeyCode.E))
         {
             switch (interactionType)
@@ -85,6 +87,9 @@ public class NPCInteraction : MonoBehaviour
         }
     }
 
+    // ============================
+    // ======= TRIGGER EVENTS =====
+    // ============================
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player")) return;

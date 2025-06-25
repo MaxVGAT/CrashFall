@@ -11,8 +11,8 @@ public class Checkpoints : MonoBehaviour
     [SerializeField] private CheckpointType checkpointType;
 
     [Header("Visuals")]
-    [SerializeField] private GameObject texture_OFF;
-    [SerializeField] private GameObject texture_ON;
+    [SerializeField] private GameObject texture_OFF;  // Inactive state visual
+    [SerializeField] private GameObject texture_ON;   // Active state visual
 
     private bool isActivated;
 
@@ -21,6 +21,7 @@ public class Checkpoints : MonoBehaviour
     // ============================
     private void Start()
     {
+        // Initialize checkpoint visuals
         if (texture_OFF != null) texture_OFF.SetActive(true);
         if (texture_ON != null) texture_ON.SetActive(false);
     }
@@ -34,41 +35,21 @@ public class Checkpoints : MonoBehaviour
 
         isActivated = true;
 
-        // Visual feedback toggle
+        // Update visuals and notify systems
         if (texture_OFF != null) texture_OFF.SetActive(false);
         if (texture_ON != null) texture_ON.SetActive(true);
 
-        // Play checkpoint sound if available
-        if (SoundManager.Instance != null)
-        {
-            SoundManager.Instance.PlayCheckpointSFX();
-        }
-        else
-        {
-            Debug.LogWarning("[Checkpoint] SoundManager.Instance is null.");
-        }
+        SoundManager.Instance?.PlayCheckpointSFX();
 
-        // Inform GameManager about checkpoint activation
-        if (GameManager.Instance != null)
+        // Handle checkpoint type-specific logic
+        switch (checkpointType)
         {
-            switch (checkpointType)
-            {
-                case CheckpointType.City:
-                    GameManager.Instance.ActivateCityCheckpoint();
-                    break;
-
-                case CheckpointType.Forest:
-                    GameManager.Instance.ActivateForestCheckpoint();
-                    break;
-
-                    // TODO: Add Castle or others here
-            }
-
-            Debug.Log($"[Checkpoint] Activated {checkpointType} checkpoint.");
-        }
-        else
-        {
-            Debug.LogWarning("[Checkpoint] GameManager.Instance is null!");
+            case CheckpointType.City:
+                GameManager.Instance?.ActivateCityCheckpoint();
+                break;
+            case CheckpointType.Forest:
+                GameManager.Instance?.ActivateForestCheckpoint();
+                break;
         }
     }
 }

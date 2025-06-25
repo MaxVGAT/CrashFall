@@ -9868,7 +9868,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'MOVE:         A/Q'
+  m_text: 'MOVE:         A/D'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b32384074ae07fa43a07fd7e5ab4c812, type: 2}
   m_sharedMaterial: {fileID: 9119532135921304377, guid: b32384074ae07fa43a07fd7e5ab4c812, type: 2}

@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class CloseGame : MonoBehaviour
 {
-
+    // ============================
+    // ======== VARIABLES =========
+    // ============================
     private bool isPlayerInside = false;
 
     // =========================
@@ -10,6 +12,7 @@ public class CloseGame : MonoBehaviour
     // =========================
     private void Update()
     {
+        // Close game when player presses E while inside trigger
         if (Input.GetKeyDown(KeyCode.E) && isPlayerInside)
         {
             GameManager.Instance.GameCleared();
@@ -26,6 +29,7 @@ public class CloseGame : MonoBehaviour
 
         isPlayerInside = true;
 
+        // Show interaction prompt
         if (InteractionPrompt.Instance != null)
         {
             InteractionPrompt.Instance.ShowPrompt();
@@ -42,6 +46,7 @@ public class CloseGame : MonoBehaviour
 
         isPlayerInside = false;
 
+        // Hide interaction prompt
         if (InteractionPrompt.Instance != null)
         {
             InteractionPrompt.Instance.HidePrompt();
