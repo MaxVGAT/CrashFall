@@ -27,6 +27,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip dashSound;
     [SerializeField] private AudioClip itemSound;
     [SerializeField] private AudioClip pauseSound;
+    [SerializeField] private AudioClip endSound;
 
     [Header("Sound Settings")]
     [SerializeField, Range(0f, 1f)] private float sfxVolume = 0.3f;
@@ -152,6 +153,7 @@ public class SoundManager : MonoBehaviour
     public void PlayDashSFX() => PlaySFX(dashSound);
     public void PickUpSFX() => PlaySFX(itemSound);
     public void PauseSFX() => PlaySFX(pauseSound);
+    public void ClearSFX() => PlaySFX(endSound);
 
     public void SetMusicVolume(float volume)
     {

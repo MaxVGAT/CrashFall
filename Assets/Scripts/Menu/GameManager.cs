@@ -35,11 +35,14 @@ public class GameManager : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private GameObject resultsPanel;
     [SerializeField] private GameObject pauseCanvas;
+    [SerializeField] private GameObject clearCanvas;
     [SerializeField] public TextMeshProUGUI timerText;
     [SerializeField] public TextMeshProUGUI finalTimeText;
     [SerializeField] public TextMeshProUGUI finalDeathText;
     [SerializeField] private GameObject pauseDimmerPanel;
     [SerializeField] private GameObject pauseText;
+    [SerializeField] private GameObject clearText;
+    [SerializeField] private GameObject clearDimmerPanel;
 
     //==================================================
     // GAME STATE FLAGS
@@ -58,6 +61,7 @@ public class GameManager : MonoBehaviour
     private float timer = 0f;
     private bool isTimerRunning = false;
     public bool isPaused = false;
+    public bool isCleared = false;
     public bool isResultShown = false;
 
     //==================================================
@@ -255,7 +259,7 @@ public class GameManager : MonoBehaviour
     }
 
     //==================================================
-    // PAUSE GAME
+    // PAUSE AND CLEAR GAME
     //==================================================
     public void PauseGame()
     {
@@ -263,6 +267,17 @@ public class GameManager : MonoBehaviour
         pauseCanvas.SetActive(isPaused);
         Time.timeScale = isPaused ? 0f : 1f;
         SoundManager.Instance?.PauseSFX();
+    }
+
+    public void GameCleared()
+    {
+        if (isCleared == false)
+        {
+            isCleared = true;
+            clearCanvas.SetActive(true);
+            Time.timeScale = 0f;
+            SoundManager.Instance?.ClearSFX();
+        }
     }
 
     //==================================================

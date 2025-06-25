@@ -12,6 +12,7 @@ public class CloseGame : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && isPlayerInside)
         {
+            GameManager.Instance.GameCleared();
             Application.Quit();
         }
     }
