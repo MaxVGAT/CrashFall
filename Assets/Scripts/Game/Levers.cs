@@ -76,6 +76,8 @@ public class Levers : MonoBehaviour
         if (isPlayerInside && Input.GetKeyDown(KeyCode.E))
         {
             ToggleLeverAndFence();
+            Inactive_Lever.SetActive(false);
+            Active_Lever.SetActive(true);
             Debug.Log("[Levers] Lever is: " + isLeverActive);
         }
     }

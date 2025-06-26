@@ -35,7 +35,6 @@ public class FallingPlatforms : MonoBehaviour
         // Validate required components
         if (crumblingBlock == null)
         {
-            Debug.LogError("[FallingPlatforms] crumblingBlock reference missing!");
             enabled = false;
             return;
         }
@@ -45,7 +44,6 @@ public class FallingPlatforms : MonoBehaviour
 
         if (blockRenderer == null || blockCollider == null)
         {
-            Debug.LogError("[FallingPlatforms] Missing SpriteRenderer or BoxCollider2D on crumblingBlock!");
             enabled = false;
             return;
         }

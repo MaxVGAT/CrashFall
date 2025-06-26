@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -57,7 +59,7 @@ public class GameManager : MonoBehaviour
     //==================================================
     // TIMER
     //==================================================
-    private float timer = 0f;
+    public float timer = 0f;
     private bool isTimerRunning = false;
     public bool isPaused = false;
     public bool isCleared = false;
@@ -312,5 +314,36 @@ public class GameManager : MonoBehaviour
     public string GetFormattedTime()
     {
         return FormatTime(timer);
+    }
+
+    //==================================================
+    // UNITYROOM RANKING
+    //==================================================
+
+    const string rankingUrl = "https://api.unityroom.com/scoreboards/8733LDE1PuTRHp9HCw7Z1jwqXsUFF4EIIq87za+g60MTQo4eNspNsBXiDAQy5OEscHHRmodB+jw9oNudHHgJ+g==/score";
+
+    public void SendScore()
+    {
+        int finalScore = Mathf.Max(0, 999999 - (deathCounter * 1000 + Mathf.RoundToInt(timer * 100)));
+        StartCoroutine(PostScore(finalScore));
+    }
+
+    public IEnumerator PostScore(int score)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("score", score);
+        form.AddField("userName", "Player");
+
+        UnityWebRequest www = UnityWebRequest.Post(rankingUrl, form);
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Score sent successfully!");
+        }
+        else
+        {
+            Debug.LogError("Score post failed: " + www.error);
+        }
     }
 }

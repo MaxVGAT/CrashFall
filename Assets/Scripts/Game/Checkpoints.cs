@@ -36,8 +36,15 @@ public class Checkpoints : MonoBehaviour
         isActivated = true;
 
         // Update visuals and notify systems
-        if (texture_OFF != null) texture_OFF.SetActive(false);
-        if (texture_ON != null) texture_ON.SetActive(true);
+        if (texture_OFF != null)
+        {
+            texture_OFF.SetActive(false);
+        }
+
+        if (texture_ON != null)
+        {
+            texture_ON.SetActive(true);
+        }
 
         SoundManager.Instance?.PlayCheckpointSFX();
 
